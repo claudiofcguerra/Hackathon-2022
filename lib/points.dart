@@ -15,25 +15,57 @@ class _PointsPageState extends State<PointsPage> {
       padding: const EdgeInsets.all(16.0),
       child: CustomScrollView(
         slivers: <Widget>[
-          const SliverAppBar(
+          SliverAppBar(
+            //elevation: 10,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20)
+              ),
             pinned: true,
-            expandedHeight: 250.0,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text('380'),
+            backgroundColor: Colors.brown.shade300,
+            expandedHeight: 125.0,
+            flexibleSpace: const FlexibleSpaceBar(
+              expandedTitleScale: 2,
+              centerTitle: true,
+              //titlePadding: EdgeInsetsDirectional.only(start: 112.5, bottom: 75),
+              title: Text(
+                '380',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 50,
+                    fontFamily: 'Lucida'
+                ),
+              ),
             ),
-          ),
-          SliverFixedExtentList(
-            itemExtent: 50.0,
-            delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return Container(
-                    alignment: Alignment.center,
-                    color: Colors.brown[100 * (index%9)],
-                    child: Text('Ganhou 10 pontos'),
-                  );
-                }
-            ),
-              )
+         ),
+          SliverPadding(
+            padding: const EdgeInsetsDirectional.only(top: 15),
+            sliver: SliverFixedExtentList(
+              itemExtent: 50.0,
+              delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsetsDirectional.only(top:0),
+
+                          alignment: Alignment.center,
+                          color: Colors.brown[300],
+                          child: const Material(
+                            type: MaterialType.transparency,
+                            child: Text(
+                                'Ganhou 10 pontos',
+                                style: TextStyle(
+                                  fontSize: 30,
+                                ),
+                            ),
+                          ),
+                        )
+                      ],
+                    );
+                  }
+              ),
+                ),
+          )
         ],
       ),
     );
