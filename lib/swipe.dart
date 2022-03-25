@@ -1,5 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
+import 'package:hackathon_2022/favs.dart';
+import 'package:hackathon_2022/points.dart';
+import 'assets/colors.dart' as constants;
 
 class SwipePage extends StatefulWidget {
   const SwipePage({Key? key}) : super(key: key);
@@ -12,6 +15,7 @@ class _SwipePageState extends State<SwipePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: constants.backgroundColor,
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: const [
@@ -19,12 +23,12 @@ class _SwipePageState extends State<SwipePage> {
             child: BuildTopRow(),
           ),
           SizedBox(
-            height: 5,
+            height: 10,
           ),
           BuildCard(),
-          SizedBox(
+          /*SizedBox(
             height: 5,
-          ),
+          ),*/
           BuildBottomRow(),
         ],
       ),
@@ -41,21 +45,21 @@ class BuildBottomRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        padding: const EdgeInsets.only(top: 4),
+        /*padding: const EdgeInsets.only(top: 1),*/
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 elevation: 8,
-                primary: Colors.white,
+                primary: constants.backgroundColor,
                 shape: const CircleBorder(),
                 minimumSize: const Size.square(60),
               ),
               onPressed: () {},
               child: const Icon(
                 Icons.clear,
-                color: Colors.green,
+                color: constants.secondaryColor,
                 size: 30,
               ),
             ),
@@ -63,13 +67,13 @@ class BuildBottomRow extends StatelessWidget {
               onPressed: () {},
               style: ElevatedButton.styleFrom(
                 elevation: 8,
-                primary: Colors.white,
+                primary: constants.backgroundColor,
                 shape: const CircleBorder(),
                 minimumSize: const Size.square(60),
               ),
               child: const Icon(
                 Icons.favorite,
-                color: Colors.green,
+                color: constants.secondaryColor,
                 size: 30,
               ),
             )
@@ -95,13 +99,13 @@ class BuildCard extends StatelessWidget {
             child: Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/testphoto1.jpg'),
+                  image: AssetImage('images/testphoto1.jpg'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
           ),
-          BuildCardInfo()
+          const BuildCardInfo()
         ]),
       ),
     );
@@ -120,16 +124,16 @@ class BuildCardInfo extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: const [
-          buildCardInfoTopRow(),
-          buildCardInfoBottomRow(),
+          BuildCardInfoTopRow(),
+          BuildCardInfoBottomRow(),
         ],
       ),
     );
   }
 }
 
-class buildCardInfoBottomRow extends StatelessWidget {
-  const buildCardInfoBottomRow({
+class BuildCardInfoBottomRow extends StatelessWidget {
+  const BuildCardInfoBottomRow({
     Key? key,
   }) : super(key: key);
 
@@ -174,8 +178,8 @@ class buildCardInfoBottomRow extends StatelessWidget {
   }
 }
 
-class buildCardInfoTopRow extends StatelessWidget {
-  const buildCardInfoTopRow({
+class BuildCardInfoTopRow extends StatelessWidget {
+  const BuildCardInfoTopRow({
     Key? key,
   }) : super(key: key);
 
@@ -189,14 +193,15 @@ class buildCardInfoTopRow extends StatelessWidget {
           child: Text(
             "Bacalhau com Natas",
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 22,
               color: Colors.white,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
         Row(
           children: const [
-            buildDifficultyStars(),
+            BuildDifficultyStars(),
           ],
         ),
       ],
@@ -204,8 +209,8 @@ class buildCardInfoTopRow extends StatelessWidget {
   }
 }
 
-class buildDifficultyStars extends StatelessWidget {
-  const buildDifficultyStars({
+class BuildDifficultyStars extends StatelessWidget {
+  const BuildDifficultyStars({
     Key? key,
   }) : super(key: key);
 
@@ -255,32 +260,75 @@ class BuildTopRow extends StatelessWidget {
       children: [
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            elevation: 8,
-            primary: Colors.transparent,
-            shape: const CircleBorder(),
-            minimumSize: const Size.square(40),
-          ),
+              splashFactory: NoSplash.splashFactory,
+              elevation: 0,
+              primary: Colors.transparent),
           onPressed: () {},
           child: const Icon(
             Icons.home,
-            color: Colors.green,
+            color: constants.secondaryColor,
             size: 40,
           ),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            elevation: 8,
-            primary: Colors.transparent,
-            shape: const CircleBorder(),
-            minimumSize: const Size.square(40),
-          ),
+              splashFactory: NoSplash.splashFactory,
+              elevation: 0,
+              primary: Colors.transparent),
           onPressed: () {},
           child: const Icon(
             Icons.search,
-            color: Colors.green,
+            color: constants.secondaryColor,
             size: 40,
           ),
-        )
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              splashFactory: NoSplash.splashFactory,
+              elevation: 0,
+              primary: Colors.transparent),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Favorites()),
+            );
+          },
+          child: const Icon(
+            Icons.favorite_border,
+            color: constants.secondaryColor,
+            size: 40,
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              splashFactory: NoSplash.splashFactory,
+              elevation: 0,
+              primary: Colors.transparent),
+          onPressed: () {},
+          child: const Icon(
+            Icons.account_circle,
+            color: constants.secondaryColor,
+            size: 40,
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              splashFactory: NoSplash.splashFactory,
+              elevation: 0,
+              primary: Colors.transparent),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const PointsPage()),
+            );
+          },
+          child: CustomPaint(
+            painter: CutOutTextPainter(
+              text: "380",
+              backgroundColor: constants.secondaryColor,
+            ),
+          ),
+        ),
       ],
     );
   }
