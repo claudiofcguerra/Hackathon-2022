@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'assets/colors.dart' as constants;
 
 class SwipePage extends StatefulWidget {
   const SwipePage({Key? key}) : super(key: key);
@@ -55,7 +55,7 @@ class BuildBottomRow extends StatelessWidget {
               onPressed: () {},
               child: const Icon(
                 Icons.clear,
-                color: Colors.green,
+                color: constants.buttonColors,
                 size: 30,
               ),
             ),
@@ -69,7 +69,7 @@ class BuildBottomRow extends StatelessWidget {
               ),
               child: const Icon(
                 Icons.favorite,
-                color: Colors.green,
+                color: constants.buttonColors,
                 size: 30,
               ),
             )
@@ -101,7 +101,7 @@ class BuildCard extends StatelessWidget {
               ),
             ),
           ),
-          BuildCardInfo()
+          const BuildCardInfo()
         ]),
       ),
     );
@@ -120,16 +120,16 @@ class BuildCardInfo extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: const [
-          buildCardInfoTopRow(),
-          buildCardInfoBottomRow(),
+          BuildCardInfoTopRow(),
+          BuildCardInfoBottomRow(),
         ],
       ),
     );
   }
 }
 
-class buildCardInfoBottomRow extends StatelessWidget {
-  const buildCardInfoBottomRow({
+class BuildCardInfoBottomRow extends StatelessWidget {
+  const BuildCardInfoBottomRow({
     Key? key,
   }) : super(key: key);
 
@@ -174,8 +174,8 @@ class buildCardInfoBottomRow extends StatelessWidget {
   }
 }
 
-class buildCardInfoTopRow extends StatelessWidget {
-  const buildCardInfoTopRow({
+class BuildCardInfoTopRow extends StatelessWidget {
+  const BuildCardInfoTopRow({
     Key? key,
   }) : super(key: key);
 
@@ -189,14 +189,15 @@ class buildCardInfoTopRow extends StatelessWidget {
           child: Text(
             "Bacalhau com Natas",
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 22,
               color: Colors.white,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
         Row(
           children: const [
-            buildDifficultyStars(),
+            BuildDifficultyStars(),
           ],
         ),
       ],
@@ -204,8 +205,8 @@ class buildCardInfoTopRow extends StatelessWidget {
   }
 }
 
-class buildDifficultyStars extends StatelessWidget {
-  const buildDifficultyStars({
+class BuildDifficultyStars extends StatelessWidget {
+  const BuildDifficultyStars({
     Key? key,
   }) : super(key: key);
 
@@ -255,29 +256,21 @@ class BuildTopRow extends StatelessWidget {
       children: [
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            elevation: 8,
-            primary: Colors.transparent,
-            shape: const CircleBorder(),
-            minimumSize: const Size.square(40),
-          ),
+              elevation: 8, primary: Colors.transparent),
           onPressed: () {},
           child: const Icon(
             Icons.home,
-            color: Colors.green,
+            color: constants.buttonColors,
             size: 40,
           ),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            elevation: 8,
-            primary: Colors.transparent,
-            shape: const CircleBorder(),
-            minimumSize: const Size.square(40),
-          ),
+              elevation: 8, primary: Colors.transparent),
           onPressed: () {},
           child: const Icon(
             Icons.search,
-            color: Colors.green,
+            color: constants.buttonColors,
             size: 40,
           ),
         )
