@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
+import 'package:hackathon_2022/favs.dart';
+import 'package:hackathon_2022/points.dart';
 import 'assets/colors.dart' as constants;
 
 class SwipePage extends StatefulWidget {
@@ -260,7 +262,6 @@ class BuildTopRow extends StatelessWidget {
           style: ElevatedButton.styleFrom(
               splashFactory: NoSplash.splashFactory,
               elevation: 0,
-
               primary: Colors.transparent),
           onPressed: () {},
           child: const Icon(
@@ -286,7 +287,12 @@ class BuildTopRow extends StatelessWidget {
               splashFactory: NoSplash.splashFactory,
               elevation: 0,
               primary: Colors.transparent),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Favorites()),
+            );
+          },
           child: const Icon(
             Icons.favorite_border,
             color: constants.secondaryColor,
@@ -310,7 +316,12 @@ class BuildTopRow extends StatelessWidget {
               splashFactory: NoSplash.splashFactory,
               elevation: 0,
               primary: Colors.transparent),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const PointsPage()),
+            );
+          },
           child: CustomPaint(
             painter: CutOutTextPainter(
               text: "380",
