@@ -7,7 +7,7 @@ class CutOutTextPainter extends CustomPainter {
       text: TextSpan(
         text: text,
         style: const TextStyle(
-          fontSize: 40.0,
+          fontSize: 27.0,
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -29,7 +29,7 @@ class CutOutTextPainter extends CustomPainter {
 
     // The box surrounding the text should be 10 pixels larger, with 4 pixels corner radius
     final boxRect = RRect.fromRectAndRadius(
-        textRect.inflate(10.0), const Radius.circular(4.0));
+        textRect.inflate(7.0), const Radius.circular(100.0));
     final boxPaint = Paint()
       ..color = backgroundColor
       ..blendMode = BlendMode.srcOut;

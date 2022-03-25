@@ -13,6 +13,7 @@ class _SwipePageState extends State<SwipePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: constants.backgroundColor,
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: const [
@@ -20,12 +21,12 @@ class _SwipePageState extends State<SwipePage> {
             child: BuildTopRow(),
           ),
           SizedBox(
-            height: 5,
+            height: 10,
           ),
           BuildCard(),
-          SizedBox(
+          /*SizedBox(
             height: 5,
-          ),
+          ),*/
           BuildBottomRow(),
         ],
       ),
@@ -42,14 +43,14 @@ class BuildBottomRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        padding: const EdgeInsets.only(top: 4),
+        /*padding: const EdgeInsets.only(top: 1),*/
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 elevation: 8,
-                primary: Colors.white,
+                primary: constants.backgroundColor,
                 shape: const CircleBorder(),
                 minimumSize: const Size.square(60),
               ),
@@ -64,7 +65,7 @@ class BuildBottomRow extends StatelessWidget {
               onPressed: () {},
               style: ElevatedButton.styleFrom(
                 elevation: 8,
-                primary: Colors.white,
+                primary: constants.backgroundColor,
                 shape: const CircleBorder(),
                 minimumSize: const Size.square(60),
               ),
@@ -258,7 +259,8 @@ class BuildTopRow extends StatelessWidget {
         ElevatedButton(
           style: ElevatedButton.styleFrom(
               splashFactory: NoSplash.splashFactory,
-              elevation: 8,
+              elevation: 0,
+
               primary: Colors.transparent),
           onPressed: () {},
           child: const Icon(
@@ -270,7 +272,7 @@ class BuildTopRow extends StatelessWidget {
         ElevatedButton(
           style: ElevatedButton.styleFrom(
               splashFactory: NoSplash.splashFactory,
-              elevation: 8,
+              elevation: 0,
               primary: Colors.transparent),
           onPressed: () {},
           child: const Icon(
@@ -282,7 +284,7 @@ class BuildTopRow extends StatelessWidget {
         ElevatedButton(
           style: ElevatedButton.styleFrom(
               splashFactory: NoSplash.splashFactory,
-              elevation: 8,
+              elevation: 0,
               primary: Colors.transparent),
           onPressed: () {},
           child: const Icon(
@@ -294,7 +296,7 @@ class BuildTopRow extends StatelessWidget {
         ElevatedButton(
           style: ElevatedButton.styleFrom(
               splashFactory: NoSplash.splashFactory,
-              elevation: 8,
+              elevation: 0,
               primary: Colors.transparent),
           onPressed: () {},
           child: const Icon(
@@ -306,7 +308,7 @@ class BuildTopRow extends StatelessWidget {
         ElevatedButton(
           style: ElevatedButton.styleFrom(
               splashFactory: NoSplash.splashFactory,
-              elevation: 8,
+              elevation: 0,
               primary: Colors.transparent),
           onPressed: () {},
           child: CustomPaint(
