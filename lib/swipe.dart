@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
 import 'assets/colors.dart' as constants;
 
 class SwipePage extends StatefulWidget {
@@ -256,7 +257,9 @@ class BuildTopRow extends StatelessWidget {
       children: [
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-              elevation: 8, primary: Colors.transparent),
+              splashFactory: NoSplash.splashFactory,
+              elevation: 8,
+              primary: Colors.transparent),
           onPressed: () {},
           child: const Icon(
             Icons.home,
@@ -266,14 +269,53 @@ class BuildTopRow extends StatelessWidget {
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-              elevation: 8, primary: Colors.transparent),
+              splashFactory: NoSplash.splashFactory,
+              elevation: 8,
+              primary: Colors.transparent),
           onPressed: () {},
           child: const Icon(
             Icons.search,
             color: constants.secondaryColor,
             size: 40,
           ),
-        )
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              splashFactory: NoSplash.splashFactory,
+              elevation: 8,
+              primary: Colors.transparent),
+          onPressed: () {},
+          child: const Icon(
+            Icons.favorite_border,
+            color: constants.secondaryColor,
+            size: 40,
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              splashFactory: NoSplash.splashFactory,
+              elevation: 8,
+              primary: Colors.transparent),
+          onPressed: () {},
+          child: const Icon(
+            Icons.account_circle,
+            color: constants.secondaryColor,
+            size: 40,
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              splashFactory: NoSplash.splashFactory,
+              elevation: 8,
+              primary: Colors.transparent),
+          onPressed: () {},
+          child: CustomPaint(
+            painter: CutOutTextPainter(
+              text: "380",
+              backgroundColor: constants.secondaryColor,
+            ),
+          ),
+        ),
       ],
     );
   }
