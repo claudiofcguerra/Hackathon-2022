@@ -55,7 +55,7 @@ class BuildBottomRow extends StatelessWidget {
               onPressed: () {},
               child: const Icon(
                 Icons.clear,
-                color: constants.buttonColors,
+                color: constants.secondaryColor,
                 size: 30,
               ),
             ),
@@ -69,7 +69,7 @@ class BuildBottomRow extends StatelessWidget {
               ),
               child: const Icon(
                 Icons.favorite,
-                color: constants.buttonColors,
+                color: constants.secondaryColor,
                 size: 30,
               ),
             )
@@ -95,7 +95,7 @@ class BuildCard extends StatelessWidget {
             child: Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/testphoto1.jpg'),
+                  image: AssetImage('images/testphoto1.jpg'),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -260,7 +260,7 @@ class BuildTopRow extends StatelessWidget {
           onPressed: () {},
           child: const Icon(
             Icons.home,
-            color: constants.buttonColors,
+            color: constants.secondaryColor,
             size: 40,
           ),
         ),
@@ -270,7 +270,7 @@ class BuildTopRow extends StatelessWidget {
           onPressed: () {},
           child: const Icon(
             Icons.search,
-            color: constants.buttonColors,
+            color: constants.secondaryColor,
             size: 40,
           ),
         )
