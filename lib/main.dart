@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hackathon_2022/swipe.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const MaterialApp(
+      home: SwipePage(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
