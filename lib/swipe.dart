@@ -39,38 +39,41 @@ class BuildBottomRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            elevation: 8,
-            primary: Colors.white,
-            shape: const CircleBorder(),
-            minimumSize: const Size.square(80),
+    return Container(
+      padding: EdgeInsets.only(top: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              elevation: 8,
+              primary: Colors.white,
+              shape: const CircleBorder(),
+              minimumSize: const Size.square(60),
+            ),
+            onPressed: () {},
+            child: const Icon(
+              Icons.clear,
+              color: Colors.green,
+              size: 30,
+            ),
           ),
-          onPressed: () {},
-          child: const Icon(
-            Icons.clear,
-            color: Colors.green,
-            size: 50,
-          ),
-        ),
-        ElevatedButton(
-          onPressed: () {},
-          style: ElevatedButton.styleFrom(
-            elevation: 8,
-            primary: Colors.white,
-            shape: const CircleBorder(),
-            minimumSize: const Size.square(80),
-          ),
-          child: const Icon(
-            Icons.favorite,
-            color: Colors.green,
-            size: 50,
-          ),
-        )
-      ],
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              elevation: 8,
+              primary: Colors.white,
+              shape: const CircleBorder(),
+              minimumSize: const Size.square(60),
+            ),
+            child: const Icon(
+              Icons.favorite,
+              color: Colors.green,
+              size: 30,
+            ),
+          )
+        ],
+      ),
     );
   }
 }
@@ -115,24 +118,25 @@ class BuildCardInfo extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: const [
-          buildTopRow(),
-          buildBottomRow(),
+          buildCardInfoTopRow(),
+          buildCardInfoBottomRow(),
         ],
       ),
     );
   }
 }
 
-class buildBottomRow extends StatelessWidget {
-  const buildBottomRow({
+class buildCardInfoBottomRow extends StatelessWidget {
+  const buildCardInfoBottomRow({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: const [
-        Material(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Material(
           type: MaterialType.transparency,
           child: Text(
             "90€",
@@ -143,13 +147,33 @@ class buildBottomRow extends StatelessWidget {
             ),
           ),
         ),
+        Material(
+          type: MaterialType.transparency,
+          child: Row(
+            children: const [
+              Icon(
+                Icons.timer,
+                color: Colors.white,
+                size: 18,
+              ),
+              Text(
+                "3m",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        )
       ],
     );
   }
 }
 
-class buildTopRow extends StatelessWidget {
-  const buildTopRow({
+class buildCardInfoTopRow extends StatelessWidget {
+  const buildCardInfoTopRow({
     Key? key,
   }) : super(key: key);
 
@@ -170,17 +194,47 @@ class buildTopRow extends StatelessWidget {
         ),
         Row(
           children: const [
-            Icon(
-              Icons.star,
-              color: Colors.white,
-              size: 20,
-            ),
-            Icon(
-              Icons.star,
-              color: Colors.white,
-              size: 20,
-            ),
+            buildDifficultyStars(),
           ],
+        ),
+      ],
+    );
+  }
+}
+
+class buildDifficultyStars extends StatelessWidget {
+  const buildDifficultyStars({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: const [
+        Icon(
+          Icons.star,
+          color: Colors.white,
+          size: 20,
+        ),
+        Icon(
+          Icons.star,
+          color: Colors.white,
+          size: 20,
+        ),
+        Icon(
+          Icons.star,
+          color: Colors.white,
+          size: 20,
+        ),
+        Icon(
+          Icons.star,
+          color: Colors.white,
+          size: 20,
+        ),
+        Icon(
+          Icons.star,
+          color: Colors.white,
+          size: 20,
         ),
       ],
     );
