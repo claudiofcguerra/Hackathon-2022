@@ -12,6 +12,7 @@ class _SwipePageState extends State<SwipePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         children: const [
           SafeArea(
@@ -95,11 +96,93 @@ class BuildCard extends StatelessWidget {
               ),
             ),
           ),
-          Row(
-            
-          )
+          BuildCardInfo()
         ]),
       ),
+    );
+  }
+}
+
+class BuildCardInfo extends StatelessWidget {
+  const BuildCardInfo({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.brown.shade300,
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: const [
+          buildTopRow(),
+          buildBottomRow(),
+        ],
+      ),
+    );
+  }
+}
+
+class buildBottomRow extends StatelessWidget {
+  const buildBottomRow({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: const [
+        Material(
+          type: MaterialType.transparency,
+          child: Text(
+            "90€",
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class buildTopRow extends StatelessWidget {
+  const buildTopRow({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Material(
+          type: MaterialType.transparency,
+          child: Text(
+            "Bacalhau com Natas",
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        Row(
+          children: const [
+            Icon(
+              Icons.star,
+              color: Colors.white,
+              size: 20,
+            ),
+            Icon(
+              Icons.star,
+              color: Colors.white,
+              size: 20,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
