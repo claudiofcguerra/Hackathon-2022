@@ -15,7 +15,7 @@ class Favorites extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.red,
+      color: Colors.white,
       child: CustomScrollView(
         primary: false,
         slivers: <Widget>[
