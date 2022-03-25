@@ -39,40 +39,42 @@ class BuildBottomRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              elevation: 8,
-              primary: Colors.white,
-              shape: const CircleBorder(),
-              minimumSize: const Size.square(60),
+    return SafeArea(
+      child: Container(
+        padding: const EdgeInsets.only(top: 4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 8,
+                primary: Colors.white,
+                shape: const CircleBorder(),
+                minimumSize: const Size.square(60),
+              ),
+              onPressed: () {},
+              child: const Icon(
+                Icons.clear,
+                color: Colors.green,
+                size: 30,
+              ),
             ),
-            onPressed: () {},
-            child: const Icon(
-              Icons.clear,
-              color: Colors.green,
-              size: 30,
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              elevation: 8,
-              primary: Colors.white,
-              shape: const CircleBorder(),
-              minimumSize: const Size.square(60),
-            ),
-            child: const Icon(
-              Icons.favorite,
-              color: Colors.green,
-              size: 30,
-            ),
-          )
-        ],
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                elevation: 8,
+                primary: Colors.white,
+                shape: const CircleBorder(),
+                minimumSize: const Size.square(60),
+              ),
+              child: const Icon(
+                Icons.favorite,
+                color: Colors.green,
+                size: 30,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
