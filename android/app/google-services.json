@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1058833821035",
+    "project_id": "hackathon-2022-e2615",
+    "storage_bucket": "hackathon-2022-e2615.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1058833821035:android:3101c71f0aabbc6c24302e",
+        "android_client_info": {
+          "package_name": "com.romi.hackathon.hackathon_2022"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1058833821035-pi63tn7b4rh6c4n19317jtb3pt1is3dm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.romi.hackathon.hackathon_2022",
+            "certificate_hash": "308f2083ab059527016a4b752d6f1779acb2785d"
+          }
+        },
+        {
+          "client_id": "1058833821035-v2s0qhkkbhff2pv16b6dttoh7rk0bllf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARgVe4SqzY5vC0ahqe_cxkQmEXibQP9dg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1058833821035-v2s0qhkkbhff2pv16b6dttoh7rk0bllf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
