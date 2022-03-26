@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hackathon_2022/assets/colors.dart' as constants;
 
 class PointsPage extends StatefulWidget {
   const PointsPage({Key? key}) : super(key: key);
@@ -12,11 +13,13 @@ class _PointsPageState extends State<PointsPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      color: constants.backgroundColor,
+      padding: const EdgeInsets.only(top: 16, right: 6, left: 6),
       child: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            //elevation: 10,
+            elevation: 10,
+            shadowColor: Colors.grey,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20)
               ),
@@ -47,7 +50,6 @@ class _PointsPageState extends State<PointsPage> {
                       children: [
                         Container(
                           padding: const EdgeInsetsDirectional.only(top:0),
-
                           alignment: Alignment.center,
                           color: Colors.brown[300],
                           child: const Material(
