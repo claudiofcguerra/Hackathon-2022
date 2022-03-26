@@ -14,30 +14,33 @@ class SubmitRecipe extends StatefulWidget{
 class _SubmitRecipeState extends State<SubmitRecipe> {
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        const SliverAppBar(
-          backgroundColor: Colors.brown,
-          pinned: true,
-          expandedHeight: 80.0,
-          flexibleSpace: FlexibleSpaceBar(
-            centerTitle: false,
-            titlePadding:EdgeInsetsDirectional.only(start: 22, bottom: 16) ,
-            title: Text('Submete a tua receita'),
+    return Container(
+      color: Colors.white,
+      child: CustomScrollView(
+        slivers: [
+          const SliverAppBar(
+            backgroundColor: Colors.brown,
+            pinned: true,
+            expandedHeight: 80.0,
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: false,
+              titlePadding:EdgeInsetsDirectional.only(start: 22, bottom: 16) ,
+              title: Text('Submete a tua receita'),
+            ),
           ),
-        ),
-        SliverList(
-          delegate: SliverChildListDelegate([
-            const BuildRecipeName(),
-            const ImageCapture(),
-            const BuildRating(),
-            const BuildTime(),
-            const BuildPrice(),
-            const BuildDescription(),
-          ]
-          ),
-        )
-      ],
+          SliverList(
+            delegate: SliverChildListDelegate([
+              const BuildRecipeName(),
+              const ImageCapture(),
+              const BuildRating(),
+              const BuildTime(),
+              const BuildPrice(),
+              const BuildDescription(),
+            ]
+            ),
+          )
+        ],
+      ),
     );
   }
 }
@@ -103,7 +106,7 @@ class _ImageCaptureState extends State<ImageCapture> {
             padding: EdgeInsets.all(15.0),
             child: Material(
               type: MaterialType.transparency,
-              child: Text('Carrega uma fotografia:', style: TextStyle(fontSize: 20.0, color: Colors.black)),
+              child: Text('Foto', style: TextStyle(fontSize: 20.0, color: Colors.black)),
             ),
           ),
           ElevatedButton(
@@ -130,7 +133,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                 ],
               )
           ),
-          image != null? SizedBox(child: Image.asset(image!.path), width: 140, height: 140): const FlutterLogo(size: 0)
+          image != null? SizedBox(child: Image.file(image!), width: 140, height: 140): const FlutterLogo(size: 0)
         ],
       ),
     );
