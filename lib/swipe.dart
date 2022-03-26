@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
+import 'package:hackathon_2022/perfil.dart';
 import 'package:hackathon_2022/points.dart';
 import 'package:hackathon_2022/recipe.dart';
 import 'package:sqflite/sqflite.dart';
@@ -483,7 +484,9 @@ class BuildTopRow extends StatelessWidget {
               constants.currentTab = "FEED";
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const FeedPage(),),
+                MaterialPageRoute(
+                  builder: (context) => const FeedPage(),
+                ),
               );
             }
           },
@@ -521,10 +524,10 @@ class BuildTopRow extends StatelessWidget {
           onPressed: () {
             /*if (constants.currentTab != "BOOKMARKS") {
               constants.currentTab = "BOOKMARKS";*/
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Favorites()),
-              );
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Favorites()),
+            );
             /*}*/
           },
           child: const Icon(
@@ -539,10 +542,10 @@ class BuildTopRow extends StatelessWidget {
               elevation: 0,
               primary: Colors.transparent),
           onPressed: () {
-            /*if (constants.currentTab != "PROFILE") {
-              constants.currentTab = "PROFILE";
-              // Navigate to profile page
-            }*/
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Perfil()),
+            );
           },
           child: const Icon(
             Icons.account_circle,
@@ -557,11 +560,11 @@ class BuildTopRow extends StatelessWidget {
               primary: Colors.transparent),
           onPressed: () {
             /*if (constants.currentTab != "POINTS") {*/
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const PointsPage()),
-              );
-          /*  }*/
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const PointsPage()),
+            );
+            /*  }*/
           },
           child: CustomPaint(
             painter: CutOutTextPainter(
