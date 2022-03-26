@@ -45,17 +45,25 @@ class Favorites extends StatelessWidget {
                                             alignment: Alignment.center,
                                             color: constants.backgroundColor,
                                             child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: <Widget>[
-                                                Expanded(
-                                                  child: FittedBox(
-                                                    fit: BoxFit.contain, // otherwise the logo will be tiny
-                                                    child: Image.asset("images/testFood1.jpeg"),
+                                                Container(
+                                                  //fit: BoxFit.contain, // otherwise the logo will be tiny
+                                                  child: Image.asset(
+                                                      "images/testFood1.jpeg",
+                                                    fit: BoxFit.fill,
                                                     alignment: Alignment.centerLeft,
                                                   ),
+                                                  //alignment: Alignment.centerLeft,
                                                 ),
 
-                                                Container(
-                                                    padding: const EdgeInsetsDirectional.only(end:6),
+
+                                                Expanded(
+                                                child: Container(
+                                                    height: 1000.0,
+                                                    width: 250.0,
+                                                    padding: const EdgeInsetsDirectional.only(end: 2),
+                                                    alignment: Alignment.center,
                                                     child: Column(
                                                         mainAxisAlignment: MainAxisAlignment.center,
                                                         children: const [
@@ -68,12 +76,21 @@ class Favorites extends StatelessWidget {
                                                               type: MaterialType.transparency,
                                                               child: Text('Preço: ', textAlign: TextAlign.center,
                                                                   style: TextStyle(fontSize: 20))
+                                                          ),
+                                                          Material(
+                                                              type: MaterialType.transparency,
+                                                              child: Text('Tempo: ', textAlign: TextAlign.center,
+                                                                  style: TextStyle(fontSize: 20))
+                                                          ),
+                                                          Material(
+                                                              type: MaterialType.transparency,
+                                                              child: Text('Dificuldade: ', textAlign: TextAlign.center,
+                                                                  style: TextStyle(fontSize: 20))
                                                           )
                                                         ]
                                                     )
                                                 )
-
-
+                                                )
                                               ],
                                             )
                                         )
