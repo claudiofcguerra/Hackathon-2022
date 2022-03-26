@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
+import 'package:hackathon_2022/assets/measure_size_render_object.dart';
 import 'package:hackathon_2022/favs.dart';
 import 'package:hackathon_2022/points.dart';
-import 'assets/colors.dart' as constants;
+import 'package:hackathon_2022/recipe.dart';
+import 'assets/constants.dart' as constants;
 
 class SwipePage extends StatefulWidget {
   const SwipePage({Key? key}) : super(key: key);
@@ -91,22 +93,54 @@ class BuildCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Draggable(
+      feedback: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: const BuildTotalCard(),
+      ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: Column(children: [
-          Expanded(
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('images/testphoto1.jpg'),
-                  fit: BoxFit.cover,
-                ),
+        child: const BuildTotalCard(),
+      ),
+      childWhenDragging: Container(
+        height: constants.cardHeightTotal,
+      ),
+    );
+  }
+}
+
+class BuildTotalCard extends StatelessWidget {
+  const BuildTotalCard({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Recipe()),
+        );
+      },
+      child: Column(
+        children: [
+          Container(
+            // Size(379.4, 513.9)
+            width: constants.cardWidth,
+            height: constants.cardHeightImage,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('images/testphoto1.jpg'),
+                fit: BoxFit.cover,
               ),
             ),
           ),
-          const BuildCardInfo()
-        ]),
+          const SizedBox(
+            width: 379.4,
+            child: BuildCardInfo(),
+          ),
+        ],
       ),
     );
   }
