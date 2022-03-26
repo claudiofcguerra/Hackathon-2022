@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
+import 'package:hackathon_2022/assets/measure_size_render_object.dart';
 import 'package:hackathon_2022/favs.dart';
 import 'package:hackathon_2022/points.dart';
 import 'assets/colors.dart' as constants;
@@ -84,29 +85,60 @@ class BuildBottomRow extends StatelessWidget {
   }
 }
 
-class BuildCard extends StatelessWidget {
+class BuildCard extends StatefulWidget {
   const BuildCard({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<BuildCard> createState() => _BuildCardState();
+}
+
+class _BuildCardState extends State<BuildCard> {
+  var widgetSize = Size.zero;
+
+  @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Column(children: [
-          Expanded(
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('images/testphoto1.jpg'),
-                  fit: BoxFit.cover,
-                ),
+      child: Draggable(
+        feedback: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            // Size(379.4, 513.9)
+            width: 379.4,
+            height: 513.9,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('images/testphoto1.jpg'),
+                fit: BoxFit.cover,
               ),
             ),
           ),
-          const BuildCardInfo()
-        ]),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Column(children: [
+            Expanded(
+              child: MeasureSize(
+                onChange: (Size size) {
+                  setState(() {
+                    widgetSize = size;
+                    print(widgetSize);
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('images/testphoto1.jpg'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const BuildCardInfo()
+          ]),
+        ),
       ),
     );
   }
