@@ -1,9 +1,12 @@
+import 'package:flutter/material.dart';
+
 class RecipeClass {
   String name;
   String description;
   String miscellaneous;
   int duration;
   double price;
+  AssetImage foodPic;
   Evaluation quality;
   Difficulty difficulty;
   Ingredients ingredients;
@@ -16,11 +19,20 @@ class RecipeClass {
       this.miscellaneous,
       this.duration,
       this.price,
+      this.foodPic,
       this.quality,
       this.difficulty,
       this.ingredients,
       this.instructions,
       this.equipment);
+
+  String formatPrice() {
+    if (price - price.floor() != 0) {
+      return price.toString() + "€";
+    } else {
+      return price.toInt().toString() + "€";
+    }
+  }
 }
 
 class Equpiment {
