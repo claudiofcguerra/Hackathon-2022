@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
 import 'package:hackathon_2022/favs.dart';
 import 'package:hackathon_2022/points.dart';
-import 'assets/colors.dart' as constants;
+import 'package:hackathon_2022/recipe.dart';
+import 'package:hackathon_2022/recipes.dart';
+import 'assets/constants.dart' as constants;
 
 class SwipePage extends StatefulWidget {
   const SwipePage({Key? key}) : super(key: key);
@@ -91,62 +93,121 @@ class BuildCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Draggable(
+      feedback: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: const BuildTotalCard(),
+      ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: Column(children: [
-          Expanded(
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('images/testphoto1.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          const BuildCardInfo()
-        ]),
+        child: const BuildTotalCard(),
+      ),
+      childWhenDragging: Container(
+        height: constants.cardHeightTotal,
       ),
     );
   }
 }
 
-class BuildCardInfo extends StatelessWidget {
-  const BuildCardInfo({
+class BuildTotalCard extends StatelessWidget {
+  const BuildTotalCard({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.brown.shade300,
-      padding: const EdgeInsets.all(8.0),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Recipe()),
+        );
+      },
       child: Column(
-        children: const [
-          BuildCardInfoTopRow(),
-          BuildCardInfoBottomRow(),
+        children: [
+          Container(
+            // Size(379.4, 513.9)
+            width: constants.cardWidth,
+            height: constants.cardHeightImage,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('images/testphoto1.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 379.4,
+            child: BuildCardInfo(),
+          ),
         ],
       ),
     );
   }
 }
 
-class BuildCardInfoBottomRow extends StatelessWidget {
-  const BuildCardInfoBottomRow({
+class BuildCardInfo extends StatefulWidget {
+  final recipe = RecipeClass(
+    "Bacalhau com Natas",
+    "",
+    "",
+    3,
+    90,
+    AssetImage('images/testphoto1.jpg'),
+    Evaluation(5),
+    Difficulty(3),
+    Ingredients(new Map()),
+    Instructions([""]),
+    Equpiment([""]),
+  );
+
+  BuildCardInfo({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<BuildCardInfo> createState() => _BuildCardInfoState();
+}
+
+class _BuildCardInfoState extends State<BuildCardInfo> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.brown.shade300,
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          BuildCardInfoTopRow(recipe: widget.recipe),
+          BuildCardInfoBottomRow(recipe: widget.recipe),
+        ],
+      ),
+    );
+  }
+}
+
+class BuildCardInfoBottomRow extends StatefulWidget {
+  RecipeClass recipe;
+
+  BuildCardInfoBottomRow({
+    Key? key,
+    required this.recipe,
+  }) : super(key: key);
+
+  @override
+  State<BuildCardInfoBottomRow> createState() => _BuildCardInfoBottomRowState();
+}
+
+class _BuildCardInfoBottomRowState extends State<BuildCardInfoBottomRow> {
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Material(
+        Material(
           type: MaterialType.transparency,
           child: Text(
-            "90€",
-            style: TextStyle(
+            widget.recipe.formatPrice(),
+            style: const TextStyle(
               fontSize: 18,
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -156,15 +217,15 @@ class BuildCardInfoBottomRow extends StatelessWidget {
         Material(
           type: MaterialType.transparency,
           child: Row(
-            children: const [
-              Icon(
+            children: [
+              const Icon(
                 Icons.timer,
                 color: Colors.white,
                 size: 18,
               ),
               Text(
-                "3m",
-                style: TextStyle(
+                widget.recipe.duration.toString() + "m",
+                style: const TextStyle(
                   fontSize: 18,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -178,21 +239,29 @@ class BuildCardInfoBottomRow extends StatelessWidget {
   }
 }
 
-class BuildCardInfoTopRow extends StatelessWidget {
-  const BuildCardInfoTopRow({
+class BuildCardInfoTopRow extends StatefulWidget {
+  RecipeClass recipe;
+
+  BuildCardInfoTopRow({
     Key? key,
+    required this.recipe,
   }) : super(key: key);
 
+  @override
+  State<BuildCardInfoTopRow> createState() => _BuildCardInfoTopRowState();
+}
+
+class _BuildCardInfoTopRowState extends State<BuildCardInfoTopRow> {
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Material(
+        Material(
           type: MaterialType.transparency,
           child: Text(
-            "Bacalhau com Natas",
-            style: TextStyle(
+            widget.recipe.name,
+            style: const TextStyle(
               fontSize: 22,
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -210,6 +279,7 @@ class BuildCardInfoTopRow extends StatelessWidget {
 }
 
 class BuildDifficultyStars extends StatelessWidget {
+  // TODO: Make this a for
   const BuildDifficultyStars({
     Key? key,
   }) : super(key: key);

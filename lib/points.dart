@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hackathon_2022/assets/colors.dart' as constants;
+import 'package:hackathon_2022/assets/constants.dart' as constants;
 
 class PointsPage extends StatefulWidget {
   const PointsPage({Key? key}) : super(key: key);
