@@ -13,6 +13,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   @override
+  bool isChecked = false;
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -116,8 +117,12 @@ class _LoginPageState extends State<LoginPage> {
                         child: Row(
                           children: [
                             Checkbox(
-                                value: false,
-                                onChanged: (bool) {}
+                                value: isChecked,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    isChecked = value!;
+                                  });
+                                },
                             ),
                             Text(
                               'Remember me',
