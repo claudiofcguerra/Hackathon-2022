@@ -34,7 +34,7 @@ class Favorites extends StatelessWidget {
                     ),
 
                     SliverFixedExtentList(
-                        itemExtent: 150.0,
+                        itemExtent: 170.0,
                         delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int count) => Padding(
                                   padding: const EdgeInsets.only(top: 10),
@@ -43,52 +43,41 @@ class Favorites extends StatelessWidget {
                                         child: Container (
                                             padding: const EdgeInsetsDirectional.only(top:0),
                                             alignment: Alignment.center,
-                                            color: Colors.brown[300],
+                                            color: constants.backgroundColor,
                                             child: Row(
                                               children: <Widget>[
                                                 Expanded(
                                                   child: FittedBox(
                                                     fit: BoxFit.contain, // otherwise the logo will be tiny
-                                                    child: Image.asset("images/testPhotoBlack.jpg"),
+                                                    child: Image.asset("images/testFood1.jpeg"),
                                                     alignment: Alignment.centerLeft,
                                                   ),
                                                 ),
-                                                 const Expanded(
-                                                  child: Material(
-                                                      type: MaterialType.transparency,
-                                                      child: Text('Sopa de Cona', textAlign: TextAlign.left,
-                                                          style: TextStyle(fontSize: 30)
-                                                      )
-                                                  ),
 
-                                                ),
+                                                Container(
+                                                    padding: const EdgeInsetsDirectional.only(end:10),
+                                                    child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: const [
+                                                          Material(
+                                                              type: MaterialType.transparency,
+                                                              child: Text('Sopa de Grelos', textAlign: TextAlign.center,
+                                                                  style: TextStyle(fontSize: 28))
+                                                          ),
+                                                          Material(
+                                                              type: MaterialType.transparency,
+                                                              child: Text('Preço: ', textAlign: TextAlign.center,
+                                                                  style: TextStyle(fontSize: 20))
+                                                          )
+                                                        ]
+                                                    )
+                                                )
+
+
                                               ],
                                             )
                                         )
                                     )
-
-                                    /*
-                                  Container(
-                                    padding: const EdgeInsetsDirectional.only(top:0),
-                                    alignment: Alignment.center,
-                                    color: Colors.brown[300],
-                                    child: Material(
-                                      child: Image.asset(
-                                          "images/testPhotoBlack.jpg",
-                                        fit: BoxFit.contain,
-                                        alignment: AlignmentDirectional.centerStart,
-                                      ),
-                                      type: MaterialType.transparency,
-                                      /*Text(
-                                      'Ganhou 10 pontos',
-                                      style: TextStyle(
-                                        fontSize: 30,
-                                      ),
-                                    ),*/
-                                    ),
-                                  ),
-*/
-
                                 ),
                           childCount: 10
                         ),
