@@ -55,14 +55,14 @@ class Favorites extends StatelessWidget {
                                                 ),
 
                                                 Container(
-                                                    padding: const EdgeInsetsDirectional.only(end:10),
+                                                    padding: const EdgeInsetsDirectional.only(end:6),
                                                     child: Column(
                                                         mainAxisAlignment: MainAxisAlignment.center,
                                                         children: const [
                                                           Material(
                                                               type: MaterialType.transparency,
                                                               child: Text('Sopa de Grelos', textAlign: TextAlign.center,
-                                                                  style: TextStyle(fontSize: 28))
+                                                                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold))
                                                           ),
                                                           Material(
                                                               type: MaterialType.transparency,
