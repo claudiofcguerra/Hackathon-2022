@@ -1,16 +1,16 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
-import 'package:hackathon_2022/favs.dart';
 import 'package:hackathon_2022/points.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:hackathon_2022/recipe.dart';
-import 'package:hackathon_2022/recipes.dart';
+import 'package:path/path.dart' as path;
+import 'package:sqflite/sqflite.dart';
 import 'package:tcard/tcard.dart';
+import 'package:hackathon_2022/recipes.dart';
 import 'assets/constants.dart' as constants;
+import 'favs.dart';
 
 class SwipePage extends StatefulWidget {
   const SwipePage({Key? key}) : super(key: key);
@@ -49,7 +49,8 @@ class _SwipePageState extends State<SwipePage> {
 class BuildBottomRow extends StatefulWidget {
   final TCardController _controller;
 
-  const BuildBottomRow(this._controller, {
+  const BuildBottomRow(
+    this._controller, {
     Key? key,
   }) : super(key: key);
 
@@ -61,45 +62,42 @@ class _BuildBottomRowState extends State<BuildBottomRow> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Container(
-        /*padding: const EdgeInsets.only(top: 1),*/
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 8,
-                primary: constants.backgroundColor,
-                shape: const CircleBorder(),
-                minimumSize: const Size.square(60),
-              ),
-              onPressed: () {
-                widget._controller.forward(direction: SwipDirection.Left);
-              },
-              child: const Icon(
-                Icons.clear,
-                color: constants.secondaryColor,
-                size: 30,
-              ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              elevation: 8,
+              primary: constants.backgroundColor,
+              shape: const CircleBorder(),
+              minimumSize: const Size.square(60),
             ),
-            ElevatedButton(
-              onPressed: () {
-                widget._controller.forward(direction: SwipDirection.Right);
-              },
-              style: ElevatedButton.styleFrom(
-                elevation: 8,
-                primary: constants.backgroundColor,
-                shape: const CircleBorder(),
-                minimumSize: const Size.square(60),
-              ),
-              child: const Icon(
-                Icons.favorite,
-                color: constants.secondaryColor,
-                size: 30,
-              ),
-            )
-          ],
-        ),
+            onPressed: () {
+              widget._controller.forward(direction: SwipDirection.Left);
+            },
+            child: const Icon(
+              Icons.clear,
+              color: constants.secondaryColor,
+              size: 30,
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              widget._controller.forward(direction: SwipDirection.Right);
+            },
+            style: ElevatedButton.styleFrom(
+              elevation: 8,
+              primary: constants.backgroundColor,
+              shape: const CircleBorder(),
+              minimumSize: const Size.square(60),
+            ),
+            child: const Icon(
+              Icons.favorite,
+              color: constants.secondaryColor,
+              size: 30,
+            ),
+          )
+        ],
       ),
     );
   }
@@ -108,7 +106,8 @@ class _BuildBottomRowState extends State<BuildBottomRow> {
 class BuildCard extends StatefulWidget {
   final TCardController _controller;
 
-  const BuildCard(this._controller, {
+  const BuildCard(
+    this._controller, {
     Key? key,
   }) : super(key: key);
 
@@ -134,6 +133,8 @@ class _BuildCardState extends State<BuildCard> {
     ],
   );
 
+  late Database database;
+
   @override
   void initState() {
     super.initState();
@@ -142,12 +143,13 @@ class _BuildCardState extends State<BuildCard> {
         index = value;
       });
     };
+    _openDatabase();
     _readFile();
   }
 
   Future<void> _readFile() async {
     String file =
-    await DefaultAssetBundle.of(context).loadString('images/test.txt');
+        await DefaultAssetBundle.of(context).loadString('images/test.txt');
     LineSplitter ls = const LineSplitter();
     List<String> _masForUsing = ls.convert(file);
 
@@ -159,7 +161,7 @@ class _BuildCardState extends State<BuildCard> {
 
     _createCards();
     setState(
-          () {
+      () {
         _body = _showCards(context);
       },
     );
@@ -169,15 +171,35 @@ class _BuildCardState extends State<BuildCard> {
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          print(index);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const Recipe()),
-          );
+          if (kDebugMode) {
+            print(index);
+          }
+          if (recipes[index] != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Recipe(recipe: recipes[index])),
+            );
+          }
         },
         child: TCard(
-          onForward: (index, _) {
+          onForward: (index, info) {
             onChange(index);
+            if (kDebugMode) {
+              print(info.direction);
+            }
+            if (info.direction == SwipDirection.Right) {
+              _insertRecipe(recipes[index]);
+
+              if (kDebugMode) {
+                print('like');
+                print(_debugGetRecipes());
+              }
+            } else {
+              if (kDebugMode) {
+                print('dislike');
+              }
+            }
           },
           controller: widget._controller,
           cards: cards,
@@ -203,6 +225,59 @@ class _BuildCardState extends State<BuildCard> {
   @override
   Widget build(BuildContext context) {
     return _body;
+  }
+
+  // A method that retrieves all the dogs from the dogs table.
+  Future<List<RecipeClass>> _debugGetRecipes() async {
+    // Get a reference to the database.
+    final db = database;
+
+    // Query the table for all The Dogs.
+    final List<Map<String, dynamic>> maps = await db.query('recipes');
+
+    // Convert the List<Map<String, dynamic> into a List<Dog>.
+    return List.generate(maps.length, (i) {
+      return RecipeClass.fromJSON(maps[i]);
+    });
+  }
+
+  void _insertRecipe(RecipeClass recipe) async {
+    // Get a reference to the database.
+    final db = database;
+
+    // Insert the Dog into the correct table. You might also specify the
+    // `conflictAlgorithm` to use in case the same dog is inserted twice.
+    //
+    // In this case, replace any previous data.
+    await db.insert(
+      'recipes',
+      recipe.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  void _openDatabase() async {
+    // Avoid errors caused by flutter upgrade.
+    // Importing 'package:flutter/widgets.dart' is required.
+    WidgetsFlutterBinding.ensureInitialized();
+    // Open the database and store the reference.
+    database = await openDatabase(
+        // Set the path to the database. Note: Using the `join` function from the
+        // `path` package is best practice to ensure the path is correctly
+        // constructed for each platform.
+        path.join(await getDatabasesPath(), 'recipes_database.db'),
+        onCreate: (db, version) {
+      // Run the CREATE TABLE statement on the database.
+      return db.execute(
+        'CREATE TABLE recipes(id INTEGER PRIMARY KEY, name TEXT, description TEXT,'
+        'miscellaneous TEXT, duration INTEGER, price REAL, foodpicurl TEXT,'
+        'quality INTEGER, difficulty INTEGER, ingredients BLOB, '
+        'instructions BLOB, equipment BLOB)',
+      );
+    },
+        // Set the version. This executes the onCreate function and provides a
+        // path to perform database upgrades and downgrades.
+        version: 1);
   }
 }
 
@@ -245,9 +320,9 @@ class BuildTotalCard extends StatelessWidget {
 }
 
 class BuildCardInfo extends StatefulWidget {
-  final recipe;
+  final RecipeClass recipe;
 
-  BuildCardInfo({Key? key, required this.recipe}) : super(key: key);
+  const BuildCardInfo({Key? key, required this.recipe}) : super(key: key);
 
   @override
   State<BuildCardInfo> createState() => _BuildCardInfoState();
@@ -270,9 +345,9 @@ class _BuildCardInfoState extends State<BuildCardInfo> {
 }
 
 class BuildCardInfoBottomRow extends StatefulWidget {
-  RecipeClass recipe;
+  final RecipeClass recipe;
 
-  BuildCardInfoBottomRow({
+  const BuildCardInfoBottomRow({
     Key? key,
     required this.recipe,
   }) : super(key: key);
@@ -324,9 +399,9 @@ class _BuildCardInfoBottomRowState extends State<BuildCardInfoBottomRow> {
 }
 
 class BuildCardInfoTopRow extends StatefulWidget {
-  RecipeClass recipe;
+  final RecipeClass recipe;
 
-  BuildCardInfoTopRow({
+  const BuildCardInfoTopRow({
     Key? key,
     required this.recipe,
   }) : super(key: key);
@@ -444,7 +519,7 @@ class BuildTopRow extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Favorites()),
+              MaterialPageRoute(builder: (context) => Favorites()),
             );
           },
           child: const Icon(

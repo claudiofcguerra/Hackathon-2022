@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hackathon_2022/recipes.dart';
 import "assets/constants.dart" as constants;
 
-class Recipe extends StatefulWidget{
-  const Recipe({Key? key}) : super(key: key);
+class Recipe extends StatefulWidget {
+  final RecipeClass recipe;
+
+  const Recipe({Key? key, required this.recipe}) : super(key: key);
+
   @override
   State<Recipe> createState() => _RecipeState();
 }
@@ -18,54 +22,52 @@ class _RecipeState extends State<Recipe> {
               color: Colors.brown.shade300,
               child: Material(
                 type: MaterialType.transparency,
-                child: CustomScrollView(
-                    slivers: [
-                      const SliverAppBar(
-                        backgroundColor: Colors.brown,
-                        pinned: true,
-                        expandedHeight: 80.0,
-                        flexibleSpace: FlexibleSpaceBar(
-                          centerTitle: false,
-                          titlePadding:EdgeInsetsDirectional.only(start: 22, bottom: 16) ,
-                          title: Text('Bacalhau com Natas'),
+                child: CustomScrollView(slivers: [
+                  SliverAppBar(
+                    backgroundColor: Colors.brown,
+                    pinned: true,
+                    expandedHeight: 80.0,
+                    flexibleSpace: FlexibleSpaceBar(
+                      centerTitle: false,
+                      titlePadding: const EdgeInsetsDirectional.only(
+                          start: 22, bottom: 16),
+                      title: Text(widget.recipe.name),
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      Image.asset(widget.recipe.foodPicUrl),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
+                                  BuildRatingStars(),
+                                  BuildDifficulty(),
+                                ]),
+                            BuildPriceAndTime(recipe: widget.recipe),
+                          ],
                         ),
                       ),
-                      SliverList(
-                        delegate: SliverChildListDelegate([
-                          Image.asset("images/testphoto1.jpg"),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: const [
-                                      BuildRatingStars(),
-                                      BuildDifficulty(),
-                                    ]
-                                ),
-                                const BuildPriceAndTime(),
-                              ],
-                            ),
-                          ),
-                          const BuildNotes(),
-                          const BuildDescription(),
-                        ]
-                        ),
-                      )
-                    ]
-                ),
-              )
-          )
-      ),
+                      const BuildNotes(),
+                      const BuildDescription(),
+                    ]),
+                  )
+                ]),
+              ))),
     );
   }
 }
 
 class BuildPriceAndTime extends StatelessWidget {
+  final RecipeClass recipe;
+
   const BuildPriceAndTime({
     Key? key,
+    required this.recipe,
   }) : super(key: key);
 
   @override
@@ -73,19 +75,22 @@ class BuildPriceAndTime extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        const Material(
+        Material(
           type: MaterialType.transparency,
-          child: Text('39,99€', style: TextStyle(fontSize: 30.0, color: Colors.white)),
+          child: Text(recipe.formatPrice(),
+              style: const TextStyle(fontSize: 30.0, color: Colors.white)),
         ),
         Row(
-          children: const [
-            Icon( Icons.timer,
+          children: [
+            Icon(
+              Icons.timer,
               color: Colors.white,
               size: 18,
             ),
             Material(
               type: MaterialType.transparency,
-              child: Text('3m', style: TextStyle(fontSize: 20.0, color: Colors.white)),
+              child: Text(recipe.duration.toString() + 'm',
+                  style: const TextStyle(fontSize: 20.0, color: Colors.white)),
             ),
           ],
         ),
@@ -130,11 +135,14 @@ class BuildRatingStars extends StatelessWidget {
         ),
         Material(
           type: MaterialType.transparency,
-          child: Text('  20 avaliações', style: TextStyle(fontSize: 20.0, color: Colors.white)), ),
+          child: Text('  20 avaliações',
+              style: TextStyle(fontSize: 20.0, color: Colors.white)),
+        ),
       ],
     );
   }
 }
+
 class BuildDifficulty extends StatelessWidget {
   const BuildDifficulty({
     Key? key,
@@ -162,7 +170,9 @@ class BuildDifficulty extends StatelessWidget {
         ),
         Material(
           type: MaterialType.transparency,
-          child: Text('  Difícil', style: TextStyle(fontSize: 20.0, color: Colors.white)), ),
+          child: Text('  Difícil',
+              style: TextStyle(fontSize: 20.0, color: Colors.white)),
+        ),
       ],
     );
   }
@@ -179,7 +189,9 @@ class BuildNotes extends StatelessWidget {
       padding: EdgeInsets.all(8.0),
       child: Material(
         type: MaterialType.transparency,
-        child: Text('iaudsfhiupasdfh\nuahnsifdn\niqewhrquir\nquwirhuiwefndioshfnweo\n', style: TextStyle(fontSize: 20.0, color: Colors.white)),
+        child: Text(
+            'iaudsfhiupasdfh\nuahnsifdn\niqewhrquir\nquwirhuiwefndioshfnweo\n',
+            style: TextStyle(fontSize: 20.0, color: Colors.white)),
       ),
     );
   }
@@ -196,7 +208,9 @@ class BuildDescription extends StatelessWidget {
       padding: EdgeInsets.all(8.0),
       child: Material(
         type: MaterialType.transparency,
-        child: Text('iaudsfhiupasdfh\nuahnsifdn\niqewhrquir\nquwirhuiwefndioshfnweo\n', style: TextStyle(fontSize: 20.0, color: Colors.white)),
+        child: Text(
+            'iaudsfhiupasdfh\nuahnsifdn\niqewhrquir\nquwirhuiwefndioshfnweo\n',
+            style: TextStyle(fontSize: 20.0, color: Colors.white)),
       ),
     );
   }
