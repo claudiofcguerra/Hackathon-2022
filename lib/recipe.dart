@@ -36,7 +36,7 @@ class _RecipeState extends State<Recipe> {
                   ),
                   SliverList(
                     delegate: SliverChildListDelegate([
-                      Image.asset(widget.recipe.foodPicUrl),
+                      Image.asset(widget.recipe.foodpicurl),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(

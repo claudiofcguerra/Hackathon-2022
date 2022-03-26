@@ -9,7 +9,7 @@ class RecipeClass {
   String miscellaneous;
   int duration;
   double price;
-  String foodPicUrl;
+  String foodpicurl;
   int quality;
   int difficulty;
   List ingredients;
@@ -23,7 +23,7 @@ class RecipeClass {
       this.miscellaneous,
       this.duration,
       this.price,
-      this.foodPicUrl,
+      this.foodpicurl,
       this.quality,
       this.difficulty,
       this.ingredients,
@@ -37,12 +37,12 @@ class RecipeClass {
         miscellaneous = json['miscellaneous'],
         duration = json['duration'],
         price = json['price'],
-        foodPicUrl = json['foodPicUrl'],
+        foodpicurl = json['foodpicurl'],
         quality = json['quality'],
         difficulty = json['difficulty'],
-        ingredients = json['ingredients'],
-        instructions = json['instructions'],
-        equipment = json['equipment'];
+        ingredients = JSONConverter.fromStringToList(json['ingredients']),
+        instructions = JSONConverter.fromStringToList(json['instructions']),
+        equipment = JSONConverter.fromStringToList(json['equipment']);
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -51,12 +51,12 @@ class RecipeClass {
         'miscellaneous': miscellaneous,
         'duration': duration,
         'price': price,
-        'foodpicurl': foodPicUrl,
+        'foodpicurl': foodpicurl,
         'quality': quality,
         'difficulty': difficulty,
-        'ingredients': _listToJson(ingredients),
-        'instructions': _listToJson(instructions),
-        'equipment': _listToJson(equipment)
+        'ingredients': JSONConverter.listToString(ingredients),
+        'instructions': JSONConverter.listToString(instructions),
+        'equipment': JSONConverter.listToString(equipment)
       };
 
   String formatPrice() {
@@ -66,8 +66,18 @@ class RecipeClass {
       return price.toInt().toString() + "€";
     }
   }
+}
 
-  _listToJson(List equipment) {
+class JSONConverter {
+  static List<String> fromStringToList(String json) {
+    return json.split("//");
+  }
 
+  static String listToString(List equipment) {
+    String _final = "";
+    for (String value in equipment) {
+      _final += value + "//";
+    }
+    return _final;
   }
 }
