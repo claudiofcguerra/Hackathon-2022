@@ -6,12 +6,12 @@ class RecipeClass {
   String miscellaneous;
   int duration;
   double price;
-  AssetImage foodPic;
-  Evaluation quality;
-  Difficulty difficulty;
-  Ingredients ingredients;
-  Instructions instructions;
-  Equpiment equipment;
+  String foodPicUrl;
+  int quality;
+  int difficulty;
+  List ingredients;
+  List instructions;
+  List equipment;
 
   RecipeClass(
       this.name,
@@ -19,12 +19,39 @@ class RecipeClass {
       this.miscellaneous,
       this.duration,
       this.price,
-      this.foodPic,
+      this.foodPicUrl,
       this.quality,
       this.difficulty,
       this.ingredients,
       this.instructions,
       this.equipment);
+
+  RecipeClass.fromJSON(Map<String, dynamic> json)
+      : name = json['name'],
+        description = json['description'],
+        miscellaneous = json['miscellaneous'],
+        duration = json['duration'],
+        price = json['price'],
+        foodPicUrl = json['foodPicUrl'],
+        quality = json['quality'],
+        difficulty = json['difficulty'],
+        ingredients = json['ingredients'],
+        instructions = json['instructions'],
+        equipment = json['equipment'];
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'description': description,
+        'miscellaneous': miscellaneous,
+        'duration': duration,
+        'price': price,
+        'foodPicUrl': foodPicUrl,
+        'quality': quality,
+        'difficulty': difficulty,
+        'ingredients': ingredients,
+        'instructions': instructions,
+        'equipment': equipment
+      };
 
   String formatPrice() {
     if (price - price.floor() != 0) {
@@ -33,34 +60,4 @@ class RecipeClass {
       return price.toInt().toString() + "€";
     }
   }
-}
-
-class Equpiment {
-  List<String> equipment;
-
-  Equpiment(this.equipment);
-}
-
-class Instructions {
-  List<String> steps;
-
-  Instructions(this.steps);
-}
-
-class Ingredients {
-  Map<String, String> ingredientsPlusQuantity;
-
-  Ingredients(this.ingredientsPlusQuantity);
-}
-
-class Difficulty {
-  double difficulty;
-
-  Difficulty(this.difficulty);
-}
-
-class Evaluation {
-  double evaluation;
-
-  Evaluation(this.evaluation);
 }

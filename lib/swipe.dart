@@ -1,8 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
 import 'package:hackathon_2022/favs.dart';
 import 'package:hackathon_2022/points.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:hackathon_2022/recipe.dart';
 import 'package:hackathon_2022/recipes.dart';
 import 'package:tcard/tcard.dart';
 import 'assets/constants.dart' as constants;
@@ -44,8 +49,7 @@ class _SwipePageState extends State<SwipePage> {
 class BuildBottomRow extends StatefulWidget {
   final TCardController _controller;
 
-  const BuildBottomRow(
-    this._controller, {
+  const BuildBottomRow(this._controller, {
     Key? key,
   }) : super(key: key);
 
@@ -104,8 +108,7 @@ class _BuildBottomRowState extends State<BuildBottomRow> {
 class BuildCard extends StatefulWidget {
   final TCardController _controller;
 
-  const BuildCard(
-    this._controller, {
+  const BuildCard(this._controller, {
     Key? key,
   }) : super(key: key);
 
@@ -114,33 +117,101 @@ class BuildCard extends StatefulWidget {
 }
 
 class _BuildCardState extends State<BuildCard> {
+  List<RecipeClass> recipes = [];
+  List<ClipRRect> cards = [];
+  late ValueChanged<int> onChange;
+  int index = 0;
+
+  Widget _body = Stack(
+    alignment: Alignment.center,
+    children: [
+      Container(
+        height: constants.cardHeightTotal,
+      ),
+      const CircularProgressIndicator(
+        color: constants.secondaryColor,
+      ),
+    ],
+  );
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    onChange = (value) {
+      setState(() {
+        index = value;
+      });
+    };
+    _readFile();
+  }
+
+  Future<void> _readFile() async {
+    String file =
+    await DefaultAssetBundle.of(context).loadString('images/test.txt');
+    LineSplitter ls = const LineSplitter();
+    List<String> _masForUsing = ls.convert(file);
+
+    for (String json in _masForUsing) {
+      Map<String, dynamic> recipeMap = jsonDecode(json);
+      var recipe = RecipeClass.fromJSON(recipeMap);
+      recipes.add(recipe);
+    }
+
+    _createCards();
+    setState(
+          () {
+        _body = _showCards(context);
+      },
+    );
+  }
+
+  Widget _showCards(BuildContext context) {
     return Expanded(
-      child: TCard(
-        controller: widget._controller,
-        cards: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: const BuildTotalCard(),
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: const BuildTotalCard(),
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: const BuildTotalCard(),
-          ),
-        ],
+      child: GestureDetector(
+        onTap: () {
+          print(index);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Recipe()),
+          );
+        },
+        child: TCard(
+          onForward: (index, _) {
+            onChange(index);
+          },
+          controller: widget._controller,
+          cards: cards,
+        ),
       ),
     );
+  }
+
+  void _createCards() {
+    cards = [];
+    for (RecipeClass recipe in recipes) {
+      cards.add(
+        ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: BuildTotalCard(
+            recipe: recipe,
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _body;
   }
 }
 
 class BuildTotalCard extends StatelessWidget {
-  const BuildTotalCard({
+  RecipeClass recipe;
+
+  BuildTotalCard({
     Key? key,
+    required this.recipe,
   }) : super(key: key);
 
   @override
@@ -151,9 +222,9 @@ class BuildTotalCard extends StatelessWidget {
           // Size(379.4, 513.9)
           width: constants.cardWidth,
           height: constants.cardHeightImage,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('images/testphoto1.jpg'),
+              image: AssetImage(recipe.foodPicUrl),
               fit: BoxFit.cover,
             ),
           ),
@@ -163,7 +234,9 @@ class BuildTotalCard extends StatelessWidget {
           child: SizedBox(
             height: constants.cardInfoHeight,
             width: 379.4,
-            child: BuildCardInfo(),
+            child: BuildCardInfo(
+              recipe: recipe,
+            ),
           ),
         ),
       ],
@@ -172,23 +245,9 @@ class BuildTotalCard extends StatelessWidget {
 }
 
 class BuildCardInfo extends StatefulWidget {
-  final recipe = RecipeClass(
-    "Bacalhau com Natas",
-    "",
-    "",
-    3,
-    90,
-    AssetImage('images/testphoto1.jpg'),
-    Evaluation(5),
-    Difficulty(3),
-    Ingredients(new Map()),
-    Instructions([""]),
-    Equpiment([""]),
-  );
+  final recipe;
 
-  BuildCardInfo({
-    Key? key,
-  }) : super(key: key);
+  BuildCardInfo({Key? key, required this.recipe}) : super(key: key);
 
   @override
   State<BuildCardInfo> createState() => _BuildCardInfoState();
