@@ -26,11 +26,11 @@ class _RecipeState extends State<Recipe> {
                   SliverAppBar(
                     backgroundColor: Colors.brown,
                     pinned: true,
-                    expandedHeight: 80.0,
+                    expandedHeight: 70.0,
                     flexibleSpace: FlexibleSpaceBar(
                       centerTitle: false,
                       titlePadding: const EdgeInsetsDirectional.only(
-                          start: 22, bottom: 16),
+                          start: 42, bottom: 16),
                       title: Text(widget.recipe.name),
                     ),
                   ),
@@ -44,16 +44,16 @@ class _RecipeState extends State<Recipe> {
                           children: [
                             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  BuildRatingStars(),
-                                  BuildDifficulty(),
+                                children: [
+                                  BuildRatingStars(recipe: widget.recipe,),
+                                  BuildDifficulty(recipe: widget.recipe,),
                                 ]),
                             BuildPriceAndTime(recipe: widget.recipe),
                           ],
                         ),
                       ),
-                      const BuildNotes(),
-                      const BuildDescription(),
+                      BuildNotes(recipe: widget.recipe),
+                      BuildDescription(recipe: widget.recipe),
                     ]),
                   )
                 ]),
@@ -82,7 +82,7 @@ class BuildPriceAndTime extends StatelessWidget {
         ),
         Row(
           children: [
-            Icon(
+            const Icon(
               Icons.timer,
               color: Colors.white,
               size: 18,
@@ -100,52 +100,38 @@ class BuildPriceAndTime extends StatelessWidget {
 }
 
 class BuildRatingStars extends StatelessWidget {
+  final RecipeClass recipe;
+
   const BuildRatingStars({
     Key? key,
+    required this.recipe,
   }) : super(key: key);
+
+  Widget stars(int s) {
+      return Row(
+        children: [
+          for (int i = 0; i < s; i++)
+            const Icon(
+              Icons.star,
+              color: Colors.white,
+              size: 25,
+            ),
+        ],
+      );
+    }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: const [
-        Icon(
-          Icons.star,
-          color: Colors.white,
-          size: 25,
-        ),
-        Icon(
-          Icons.star,
-          color: Colors.white,
-          size: 25,
-        ),
-        Icon(
-          Icons.star,
-          color: Colors.white,
-          size: 25,
-        ),
-        Icon(
-          Icons.star,
-          color: Colors.white,
-          size: 25,
-        ),
-        Icon(
-          Icons.star,
-          color: Colors.white,
-          size: 25,
-        ),
-        Material(
-          type: MaterialType.transparency,
-          child: Text('  20 avaliações',
-              style: TextStyle(fontSize: 20.0, color: Colors.white)),
-        ),
-      ],
-    );
+    return stars(recipe.quality);
   }
 }
 
 class BuildDifficulty extends StatelessWidget {
+  final RecipeClass recipe;
+
   const BuildDifficulty({
     Key? key,
+    required this.recipe,
   }) : super(key: key);
 
   @override
@@ -179,8 +165,11 @@ class BuildDifficulty extends StatelessWidget {
 }
 
 class BuildNotes extends StatelessWidget {
+  final RecipeClass recipe;
+
   const BuildNotes({
     Key? key,
+    required this.recipe,
   }) : super(key: key);
 
   @override
@@ -198,8 +187,11 @@ class BuildNotes extends StatelessWidget {
 }
 
 class BuildDescription extends StatelessWidget {
+  final RecipeClass recipe;
+
   const BuildDescription({
     Key? key,
+    required this.recipe,
   }) : super(key: key);
 
   @override
