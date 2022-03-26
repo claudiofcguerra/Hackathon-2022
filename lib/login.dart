@@ -14,6 +14,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
            Container(
@@ -37,24 +38,95 @@ class _LoginPageState extends State<LoginPage> {
                       bottomLeft: Radius.circular(10),
                       bottomRight: Radius.circular(10)
                     ),
-                    color: Colors.brown[300]
+                    color: Colors.brown[300]?.withOpacity(0.95)
                   ),
                   child: Column(
-                    children: const [
-                      TextField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                              Icons.perm_identity,
-                            color: Colors.white70,
-                          ),
-                          contentPadding: EdgeInsets.all(5),
-                          //hintText: 'username',
-                          labelText: 'username',
-                          labelStyle: TextStyle(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 15),
+                        child: TextFormField(
+                          style: const TextStyle(
                             color: Colors.white70
-                          )
-                        ),
+                          ),
+                          decoration: InputDecoration(
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.transparent, width: 0.0),
+                                borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                              ),
+                              filled: true,
+                              fillColor: Colors.brown[200],
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.transparent, width: 0.0),
+                                borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                              ),
+                            prefixIcon: const Icon(
+                                Icons.perm_identity,
+                              color: Colors.white70,
+                            ),
+                            contentPadding: const EdgeInsets.all(5),
+                            //hintText: 'username',
+                            hintText: 'Username',
+                            hintStyle: const TextStyle(
+                              fontFamily: 'Poppins',
+                              color: Colors.white70
+                            )
+                          ),
 
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 15),
+                        child: TextFormField(
+                          obscureText: true,
+                          style: const TextStyle(
+                              color: Colors.white70
+                          ),
+                          decoration: InputDecoration(
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.transparent, width: 0.0),
+                                borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                              ),
+                              filled: true,
+                              fillColor: Colors.brown[200],
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.transparent, width: 0.0),
+                                borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                              ),
+                              prefixIcon: const Icon(
+                                Icons.lock,
+                                color: Colors.white70,
+                              ),
+                              contentPadding: const EdgeInsets.all(5),
+                              hintText: 'Password',
+                              hintStyle: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white70
+                              )
+                          ),
+
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 15),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.brown[200],
+                            fixedSize: const Size(75, 35),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            ),
+                          onPressed: () {  },
+
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white70
+                            ),
+                          ),
+
+                        ),
                       )
                     ],
                   ),
