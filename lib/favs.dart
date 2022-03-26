@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'assets/colors.dart' as constants;
 
 void main() {
   runApp(
@@ -9,12 +10,48 @@ void main() {
 }
 
 
+
 class Favorites extends StatelessWidget {
   const Favorites({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+              child: CustomScrollView(
+                  slivers: [
+                    const SliverAppBar(
+                      pinned: true,
+                      expandedHeight: 150.0,
+                      flexibleSpace: FlexibleSpaceBar(
+                        title: Text('Demo'),
+                      ),
+                    ),
+
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                          [
+                            Image.asset("images/testPhotoBlack.jpg"),
+                            Text("Cachorro"),
+                            Image.asset("images/testPhotoBlack.jpg"),
+                            Text("Cachorro2"),
+                            Image.asset("images/testPhotoBlack.jpg"),
+                            Text("Cachorro3"),
+                          ]
+                      ),
+                    )
+
+                  ]
+              )
+          )
+      ),
+    );
+
+    /*return Container(
       color: Colors.white,
       child: CustomScrollView(
         primary: false,
@@ -26,25 +63,35 @@ class Favorites extends StatelessWidget {
               mainAxisSpacing: 10,
               crossAxisCount: 1,
               children: <Widget>[
+
                 Container(
+                  height: 200,
                   padding: const EdgeInsets.all(8),
-                  child: const Text("Teste 1"),
-                  color: Colors.green[100],
+                  child: const Material(
+                      type: MaterialType.transparency,
+                      child: Text('Teste 1')),
+                  color: constants.primaryColor,
                 ),
                 Container(
                   padding: const EdgeInsets.all(8),
-                  child: const Text('Teste 2'),
-                  color: Colors.green[200],
+                  child: const Material(
+                      type: MaterialType.transparency,
+                      child: Text('Teste 2')),
+                  color: constants.primaryColor,
                 ),
                 Container(
                   padding: const EdgeInsets.all(8),
-                  child: const Text('Teste 3'),
-                  color: Colors.green[300],
+                  child: const Material(
+                      type: MaterialType.transparency,
+                      child: Text('Teste 3')),
+                  color: constants.primaryColor,
                 ),
                 Container(
                   padding: const EdgeInsets.all(8),
-                  child: const Text('Teste 4'),
-                  color: Colors.green[400],
+                  child: const Material(
+                    type: MaterialType.transparency,
+                      child: Text('Teste 4')),
+                  color: constants.primaryColor,
                 ),
 
               ],
@@ -53,5 +100,7 @@ class Favorites extends StatelessWidget {
         ],
       ),
     );
+  */
+
   }
 }
