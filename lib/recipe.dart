@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hackathon_2022/recipes.dart';
+import 'package:hackathon_2022/recipeclass.dart';
 import "assets/constants.dart" as constants;
 
 class Recipe extends StatefulWidget {

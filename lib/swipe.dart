@@ -7,9 +7,10 @@ import 'package:hackathon_2022/points.dart';
 import 'package:hackathon_2022/recipe.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:tcard/tcard.dart';
-import 'package:hackathon_2022/recipes.dart';
+import 'package:hackathon_2022/recipeclass.dart';
 import 'assets/constants.dart' as constants;
 import 'favs.dart';
+import 'feed.dart';
 
 class SwipePage extends StatefulWidget {
   const SwipePage({Key? key}) : super(key: key);
@@ -51,8 +52,8 @@ class _SwipePageState extends State<SwipePage> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          SafeArea(
-            child: BuildTopRow(),
+          const SafeArea(
+            child: const BuildTopRow(),
           ),
           const SizedBox(
             height: 10,
@@ -252,7 +253,7 @@ class _BuildCardState extends State<BuildCard> {
 
   void _insertRecipe(RecipeClass recipe) async {
     // Get a reference to the database.
-    final db = constants.database;
+    final db = constants.recipeDatabase;
 
     // Insert the Dog into the correct table. You might also specify the
     // `conflictAlgorithm` to use in case the same dog is inserted twice.
@@ -317,7 +318,7 @@ class _BuildCardInfoState extends State<BuildCardInfo> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.brown.shade300,
+      color: constants.brown,
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
@@ -463,7 +464,7 @@ class BuildDifficultyStars extends StatelessWidget {
 }
 
 class BuildTopRow extends StatelessWidget {
-  BuildTopRow({
+  const BuildTopRow({
     Key? key,
   }) : super(key: key);
 
@@ -477,7 +478,15 @@ class BuildTopRow extends StatelessWidget {
               splashFactory: NoSplash.splashFactory,
               elevation: 0,
               primary: Colors.transparent),
-          onPressed: () {},
+          onPressed: () {
+            if (constants.currentTab != "FEED") {
+              constants.currentTab = "FEED";
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const FeedPage(),),
+              );
+            }
+          },
           child: const Icon(
             Icons.home,
             color: constants.secondaryColor,
@@ -489,7 +498,15 @@ class BuildTopRow extends StatelessWidget {
               splashFactory: NoSplash.splashFactory,
               elevation: 0,
               primary: Colors.transparent),
-          onPressed: () {},
+          onPressed: () {
+            if (constants.currentTab != "SWIPE") {
+              constants.currentTab = "SWIPE";
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const SwipePage()),
+              );
+            }
+          },
           child: const Icon(
             Icons.search,
             color: constants.secondaryColor,
@@ -502,10 +519,13 @@ class BuildTopRow extends StatelessWidget {
               elevation: 0,
               primary: Colors.transparent),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Favorites()),
-            );
+            /*if (constants.currentTab != "BOOKMARKS") {
+              constants.currentTab = "BOOKMARKS";*/
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Favorites()),
+              );
+            /*}*/
           },
           child: const Icon(
             Icons.favorite_border,
@@ -518,7 +538,12 @@ class BuildTopRow extends StatelessWidget {
               splashFactory: NoSplash.splashFactory,
               elevation: 0,
               primary: Colors.transparent),
-          onPressed: () {},
+          onPressed: () {
+            /*if (constants.currentTab != "PROFILE") {
+              constants.currentTab = "PROFILE";
+              // Navigate to profile page
+            }*/
+          },
           child: const Icon(
             Icons.account_circle,
             color: constants.secondaryColor,
@@ -531,10 +556,12 @@ class BuildTopRow extends StatelessWidget {
               elevation: 0,
               primary: Colors.transparent),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const PointsPage()),
-            );
+            /*if (constants.currentTab != "POINTS") {*/
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PointsPage()),
+              );
+          /*  }*/
           },
           child: CustomPaint(
             painter: CutOutTextPainter(
