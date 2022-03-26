@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
 import 'package:hackathon_2022/favs.dart';
@@ -14,35 +15,45 @@ class SwipePage extends StatefulWidget {
 }
 
 class _SwipePageState extends State<SwipePage> {
+  final TCardController _controller = TCardController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: constants.backgroundColor,
       padding: const EdgeInsets.all(16.0),
       child: Column(
-        children: const [
-          SafeArea(
+        children: [
+          const SafeArea(
             child: BuildTopRow(),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          BuildCard(),
+          BuildCard(_controller),
           /*SizedBox(
             height: 5,
           ),*/
-          BuildBottomRow(),
+          BuildBottomRow(_controller),
         ],
       ),
     );
   }
 }
 
-class BuildBottomRow extends StatelessWidget {
-  const BuildBottomRow({
+class BuildBottomRow extends StatefulWidget {
+  final TCardController _controller;
+
+  const BuildBottomRow(
+    this._controller, {
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<BuildBottomRow> createState() => _BuildBottomRowState();
+}
+
+class _BuildBottomRowState extends State<BuildBottomRow> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -58,7 +69,9 @@ class BuildBottomRow extends StatelessWidget {
                 shape: const CircleBorder(),
                 minimumSize: const Size.square(60),
               ),
-              onPressed: () {},
+              onPressed: () {
+                widget._controller.forward(direction: SwipDirection.Left);
+              },
               child: const Icon(
                 Icons.clear,
                 color: constants.secondaryColor,
@@ -66,7 +79,9 @@ class BuildBottomRow extends StatelessWidget {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                widget._controller.forward(direction: SwipDirection.Right);
+              },
               style: ElevatedButton.styleFrom(
                 elevation: 8,
                 primary: constants.backgroundColor,
@@ -86,15 +101,24 @@ class BuildBottomRow extends StatelessWidget {
   }
 }
 
-class BuildCard extends StatelessWidget {
-  const BuildCard({
+class BuildCard extends StatefulWidget {
+  final TCardController _controller;
+
+  const BuildCard(
+    this._controller, {
     Key? key,
   }) : super(key: key);
 
   @override
+  State<BuildCard> createState() => _BuildCardState();
+}
+
+class _BuildCardState extends State<BuildCard> {
+  @override
   Widget build(BuildContext context) {
     return Expanded(
       child: TCard(
+        controller: widget._controller,
         cards: [
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
@@ -292,27 +316,27 @@ class BuildDifficultyStars extends StatelessWidget {
         Icon(
           Icons.star,
           color: Colors.white,
-          size: 20,
+          size: 15,
         ),
         Icon(
           Icons.star,
           color: Colors.white,
-          size: 20,
+          size: 15,
         ),
         Icon(
           Icons.star,
           color: Colors.white,
-          size: 20,
+          size: 15,
         ),
         Icon(
           Icons.star,
           color: Colors.white,
-          size: 20,
+          size: 15,
         ),
         Icon(
           Icons.star,
           color: Colors.white,
-          size: 20,
+          size: 15,
         ),
       ],
     );
