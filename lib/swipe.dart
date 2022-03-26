@@ -205,9 +205,9 @@ class BuildTotalCard extends StatelessWidget {
           // Size(379.4, 513.9)
           width: constants.cardWidth,
           height: constants.cardHeightImage,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('images/testphoto1.jpg'),
+              image: AssetImage(recipe.foodPicUrl),
               fit: BoxFit.cover,
             ),
           ),
