@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 
 class RecipeClass {
+  int id;
   String name;
   String description;
   String miscellaneous;
@@ -14,6 +17,7 @@ class RecipeClass {
   List equipment;
 
   RecipeClass(
+      this.id,
       this.name,
       this.description,
       this.miscellaneous,
@@ -27,7 +31,8 @@ class RecipeClass {
       this.equipment);
 
   RecipeClass.fromJSON(Map<String, dynamic> json)
-      : name = json['name'],
+      : id = json['id'],
+        name = json['name'],
         description = json['description'],
         miscellaneous = json['miscellaneous'],
         duration = json['duration'],
@@ -40,17 +45,18 @@ class RecipeClass {
         equipment = json['equipment'];
 
   Map<String, dynamic> toJson() => {
+        'id': id,
         'name': name,
         'description': description,
         'miscellaneous': miscellaneous,
         'duration': duration,
         'price': price,
-        'foodPicUrl': foodPicUrl,
+        'foodpicurl': foodPicUrl,
         'quality': quality,
         'difficulty': difficulty,
-        'ingredients': ingredients,
-        'instructions': instructions,
-        'equipment': equipment
+        'ingredients': _listToJson(ingredients),
+        'instructions': _listToJson(instructions),
+        'equipment': _listToJson(equipment)
       };
 
   String formatPrice() {
@@ -59,5 +65,9 @@ class RecipeClass {
     } else {
       return price.toInt().toString() + "€";
     }
+  }
+
+  _listToJson(List equipment) {
+
   }
 }
