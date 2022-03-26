@@ -3,7 +3,7 @@ import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
 import 'package:hackathon_2022/assets/measure_size_render_object.dart';
 import 'package:hackathon_2022/favs.dart';
 import 'package:hackathon_2022/points.dart';
-import 'assets/colors.dart' as constants;
+import 'assets/constants.dart' as constants;
 
 class SwipePage extends StatefulWidget {
   const SwipePage({Key? key}) : super(key: key);
@@ -85,61 +85,54 @@ class BuildBottomRow extends StatelessWidget {
   }
 }
 
-class BuildCard extends StatefulWidget {
+class BuildCard extends StatelessWidget {
   const BuildCard({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<BuildCard> createState() => _BuildCardState();
+  Widget build(BuildContext context) {
+    return Draggable(
+      feedback: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: const BuildTotalCard(),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: const BuildTotalCard(),
+      ),
+      childWhenDragging: Container(
+        height: constants.cardHeightTotal,
+      ),
+    );
+  }
 }
 
-class _BuildCardState extends State<BuildCard> {
-  var widgetSize = Size.zero;
+class BuildTotalCard extends StatelessWidget {
+  const BuildTotalCard({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Draggable(
-        feedback: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Container(
-            // Size(379.4, 513.9)
-            width: 379.4,
-            height: 513.9,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('images/testphoto1.jpg'),
-                fit: BoxFit.cover,
-              ),
+    return Column(
+      children: [
+        Container(
+          // Size(379.4, 513.9)
+          width: constants.cardWidth,
+          height: constants.cardHeightImage,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/testphoto1.jpg'),
+              fit: BoxFit.cover,
             ),
           ),
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Column(children: [
-            Expanded(
-              child: MeasureSize(
-                onChange: (Size size) {
-                  setState(() {
-                    widgetSize = size;
-                    print(widgetSize);
-                  });
-                },
-                child: Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('images/testphoto1.jpg'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const BuildCardInfo()
-          ]),
+        const SizedBox(
+          width: 379.4,
+          child: BuildCardInfo(),
         ),
-      ),
+      ],
     );
   }
 }

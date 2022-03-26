@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "assets/colors.dart" as constants;
+import "assets/constants.dart" as constants;
 
 class Recipe extends StatefulWidget{
   const Recipe({Key? key}) : super(key: key);

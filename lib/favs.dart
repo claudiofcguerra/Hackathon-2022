@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'assets/colors.dart' as constants;
+import 'assets/constants.dart' as constants;
 
 void main() {
   runApp(
