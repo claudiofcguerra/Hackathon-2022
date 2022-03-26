@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
+import 'package:hackathon_2022/login.dart';
 import 'package:hackathon_2022/perfil.dart';
 import 'package:hackathon_2022/points.dart';
 import 'package:hackathon_2022/recipe.dart';
@@ -542,10 +544,16 @@ class BuildTopRow extends StatelessWidget {
               elevation: 0,
               primary: Colors.transparent),
           onPressed: () {
-            Navigator.push(
+            /*Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Perfil()),
-            );
+            );*/
+            FirebaseAuth.instance.signOut().then(
+                  (_) => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  ),
+                );
           },
           child: const Icon(
             Icons.account_circle,

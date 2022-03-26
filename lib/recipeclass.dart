@@ -1,5 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+void addRecipe(RecipeClass recipe) {
+  CollectionReference recipes =
+      FirebaseFirestore.instance.collection('Recipes');
+
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String uid = auth.currentUser!.uid.toString();
+  recipes.add(recipe.toJson());
+}
+
 class RecipeClass {
-  int id;
   String name;
   String description;
   String miscellaneous;
@@ -13,7 +24,6 @@ class RecipeClass {
   List equipment;
 
   RecipeClass(
-      this.id,
       this.name,
       this.description,
       this.miscellaneous,
@@ -27,8 +37,7 @@ class RecipeClass {
       this.equipment);
 
   RecipeClass.fromJSON(Map<String, dynamic> json)
-      : id = json['id'],
-        name = json['name'],
+      : name = json['name'],
         description = json['description'],
         miscellaneous = json['miscellaneous'],
         duration = json['duration'],
@@ -41,7 +50,6 @@ class RecipeClass {
         equipment = JSONConverter.fromStringToList(json['equipment']);
 
   Map<String, dynamic> toJson() => {
-        'id': id,
         'name': name,
         'description': description,
         'miscellaneous': miscellaneous,

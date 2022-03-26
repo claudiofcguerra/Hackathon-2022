@@ -11,21 +11,6 @@ class Favorites extends StatefulWidget {
 }
 
 class _FavoritesState extends State<Favorites> {
-  final recipe = RecipeClass(
-    0,
-    "Bacalhau com Natas",
-    "",
-    "",
-    3,
-    90,
-    'images/testphoto1.jpg',
-    5,
-    3,
-    [""],
-    [""],
-    [""],
-  );
-
   late List<RecipeClass> favoritesList;
 
   @override
@@ -85,13 +70,14 @@ class _FavoritesState extends State<Favorites> {
                         padding: const EdgeInsets.only(top: 10),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.push(
+                            addRecipe(favoritesList[count]);
+                            /*Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => Recipe(
                                         recipe: favoritesList[count],
                                       )),
-                            );
+                            );*/
                           },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
