@@ -3,6 +3,7 @@ import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
 import 'package:hackathon_2022/assets/measure_size_render_object.dart';
 import 'package:hackathon_2022/favs.dart';
 import 'package:hackathon_2022/points.dart';
+import 'package:hackathon_2022/recipe.dart';
 import 'assets/constants.dart' as constants;
 
 class SwipePage extends StatefulWidget {
@@ -115,24 +116,32 @@ class BuildTotalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          // Size(379.4, 513.9)
-          width: constants.cardWidth,
-          height: constants.cardHeightImage,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('images/testphoto1.jpg'),
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Recipe()),
+        );
+      },
+      child: Column(
+        children: [
+          Container(
+            // Size(379.4, 513.9)
+            width: constants.cardWidth,
+            height: constants.cardHeightImage,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('images/testphoto1.jpg'),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
-        const SizedBox(
-          width: 379.4,
-          child: BuildCardInfo(),
-        ),
-      ],
+          const SizedBox(
+            width: 379.4,
+            child: BuildCardInfo(),
+          ),
+        ],
+      ),
     );
   }
 }
