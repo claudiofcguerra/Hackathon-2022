@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hackathon_2022/assets/constants.dart' as constants;
 import 'package:material_color_utilities/material_color_utilities.dart';
 
@@ -66,10 +67,12 @@ class _LoginPageState extends State<LoginPage> {
                             contentPadding: const EdgeInsets.all(5),
                             //hintText: 'username',
                             hintText: 'Username',
-                            hintStyle: const TextStyle(
-                              fontFamily: 'Poppins',
-                              color: Colors.white70
-                            )
+                            hintStyle: GoogleFonts.raleway(
+                                textStyle: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white70,
+                                )
+                            ),
                           ),
 
                         ),
@@ -98,16 +101,38 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               contentPadding: const EdgeInsets.all(5),
                               hintText: 'Password',
-                              hintStyle: const TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white70
-                              )
+                              hintStyle: GoogleFonts.raleway(
+                                  textStyle: const TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white70,
+                                  )
+                              ),
                           ),
 
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 15),
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        child: Row(
+                          children: [
+                            Checkbox(
+                                value: false,
+                                onChanged: (bool) {}
+                            ),
+                            Text(
+                              'Remember me',
+                              style: GoogleFonts.raleway(
+                                  textStyle: const TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white70,
+                                  )
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             primary: Colors.brown[200],
@@ -118,11 +143,13 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           onPressed: () {  },
 
-                          child: const Text(
+                          child: Text(
                             'Login',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white70
+                            style: GoogleFonts.raleway(
+                                textStyle: const TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white70,
+                                )
                             ),
                           ),
 
