@@ -38,7 +38,37 @@ class Favorites extends StatelessWidget {
                         delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int count) => Padding(
                                   padding: const EdgeInsets.only(top: 10),
-                                  child: Container(
+                                    child: ClipRRect (
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Container (
+                                            padding: const EdgeInsetsDirectional.only(top:0),
+                                            alignment: Alignment.center,
+                                            color: Colors.brown[300],
+                                            child: Row(
+                                              children: <Widget>[
+                                                Expanded(
+                                                  child: FittedBox(
+                                                    fit: BoxFit.contain, // otherwise the logo will be tiny
+                                                    child: Image.asset("images/testPhotoBlack.jpg"),
+                                                    alignment: Alignment.centerLeft,
+                                                  ),
+                                                ),
+                                                 const Expanded(
+                                                  child: Material(
+                                                      type: MaterialType.transparency,
+                                                      child: Text('Sopa de Cona', textAlign: TextAlign.left,
+                                                          style: TextStyle(fontSize: 30)
+                                                      )
+                                                  ),
+
+                                                ),
+                                              ],
+                                            )
+                                        )
+                                    )
+
+                                    /*
+                                  Container(
                                     padding: const EdgeInsetsDirectional.only(top:0),
                                     alignment: Alignment.center,
                                     color: Colors.brown[300],
@@ -57,6 +87,8 @@ class Favorites extends StatelessWidget {
                                     ),*/
                                     ),
                                   ),
+*/
+
                                 ),
                           childCount: 10
                         ),
