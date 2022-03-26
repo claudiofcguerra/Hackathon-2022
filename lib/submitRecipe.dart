@@ -6,12 +6,14 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
 class SubmitRecipe extends StatefulWidget{
+
   const SubmitRecipe ({Key? key}) : super(key: key);
   @override
   State<SubmitRecipe> createState() => _SubmitRecipeState();
 }
 
 class _SubmitRecipeState extends State<SubmitRecipe> {
+  //var l = [TextEditingController(text: ""), TextEditingController(text: ""),TextEditingController(text: ""), TextEditingController(text: ""),TextEditingController(text: ""), TextEditingController(text: ""),TextEditingController(text: "")];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,12 +32,15 @@ class _SubmitRecipeState extends State<SubmitRecipe> {
           ),
           SliverList(
             delegate: SliverChildListDelegate([
-              const BuildRecipeName(),
+              BuildRecipeName(),
               const ImageCapture(),
-              const BuildRating(),
-              const BuildTime(),
-              const BuildPrice(),
-              const BuildDescription(),
+              BuildRating(),
+              BuildTime(),
+              BuildPrice(),
+              BuildOptional(),
+              BuildDescription(text: "Ingredientes"),
+              BuildDescription(text: "Instruções"),
+              BuildSubmitButton(),
             ]
             ),
           )
@@ -46,9 +51,11 @@ class _SubmitRecipeState extends State<SubmitRecipe> {
 }
 
 class BuildRecipeName extends StatelessWidget {
-  const BuildRecipeName({
-    Key? key
+  BuildRecipeName({
+    Key? key, //required this.myController
   }) : super(key: key);
+
+  //TextEditingController myController;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +63,7 @@ class BuildRecipeName extends StatelessWidget {
       padding: const EdgeInsetsDirectional.fromSTEB(7.0, 40.0, 7.0, 20.0),
       child: Material(
         child: TextFormField(
+          //controller: myController,
           decoration: InputDecoration(
             labelText: "Nome da receita",
             fillColor: Colors.white,
@@ -106,7 +114,7 @@ class _ImageCaptureState extends State<ImageCapture> {
             padding: EdgeInsets.all(15.0),
             child: Material(
               type: MaterialType.transparency,
-              child: Text('Foto', style: TextStyle(fontSize: 20.0, color: Colors.black)),
+              child: Text('Fotografia', style: TextStyle(fontSize: 20.0, color: Colors.black)),
             ),
           ),
           ElevatedButton(
@@ -142,12 +150,17 @@ class _ImageCaptureState extends State<ImageCapture> {
 
 
 class BuildRating extends StatefulWidget{
-  const BuildRating({Key? key}) : super(key: key);
+  const BuildRating({
+    Key? key, //required this.myController
+  }) : super(key: key);
+
+  //TextEditingController myController;
 
   @override
   _BuildRating createState() => _BuildRating();
 }
 class _BuildRating extends State<BuildRating> {
+  //TextEditingController myController;
   var rating = 0.0;
   @override
   Widget build(BuildContext context) {
@@ -173,6 +186,7 @@ class _BuildRating extends State<BuildRating> {
             onRatingChanged: (value) {
               setState(() {
                 rating = value;
+                //myController.text =
               });
             },
           ),
@@ -184,8 +198,10 @@ class _BuildRating extends State<BuildRating> {
 
 class BuildTime extends StatefulWidget {
   const BuildTime({
-    Key? key,
+    Key? key, //required this.myController
   }) : super(key: key);
+
+  //final TextEditingController myController;
 
   @override
   _BuildTime createState() => _BuildTime();
@@ -240,8 +256,10 @@ class _BuildTime extends State<BuildTime> {
 
 class BuildPrice extends StatelessWidget{
   const BuildPrice ({
-    Key? key,
+    Key? key, //required this.myController
   }) : super(key: key);
+
+  //final TextEditingController myController;
 
   @override
   Widget build(BuildContext context) {
@@ -249,6 +267,7 @@ class BuildPrice extends StatelessWidget{
       padding: const EdgeInsetsDirectional.fromSTEB(7.0, 25.0, 7.0, 20.0),
       child: Material(
         child: TextFormField(
+          //controller: myController,
           decoration: InputDecoration(
             labelText: "Preço",
             fillColor: Colors.white,
@@ -268,10 +287,12 @@ class BuildPrice extends StatelessWidget{
 }
 
 
-class BuildDescription extends StatelessWidget{
-  const BuildDescription ({
-    Key? key,
+class BuildOptional extends StatelessWidget{
+  const BuildOptional ({
+    Key? key, //required this.myController
   }) : super(key: key);
+
+  //final TextEditingController myController;
 
   @override
   Widget build(BuildContext context) {
@@ -279,9 +300,10 @@ class BuildDescription extends StatelessWidget{
       padding: const EdgeInsetsDirectional.fromSTEB(7.0, 25.0, 7.0, 20.0),
       child: Material(
         child: TextFormField(
-          maxLines: 15,
+          maxLines: 5,
+          //controller: myController,
           decoration: InputDecoration(
-            labelText: "Descrição da receita",
+            labelText: "Opcional",
             fillColor: Colors.white,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24.0),
@@ -293,6 +315,75 @@ class BuildDescription extends StatelessWidget{
             fontFamily: "Poppins",
           ),
         ),
+      ),
+    );
+  }
+}
+
+
+class BuildDescription extends StatelessWidget{
+  BuildDescription ({
+    Key? key, required this.text//required this.myController
+  }) : super(key: key);
+
+  String text;
+  //final TextEditingController myController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.fromSTEB(7.0, 25.0, 7.0, 20.0),
+      child: Material(
+        child: TextFormField(
+          //controller: myController,
+          maxLines: 15,
+          decoration: InputDecoration(
+            labelText: text,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(24.0),
+              borderSide: const BorderSide(
+              ),
+            ),
+          ),
+          style: const TextStyle(
+            fontFamily: "Poppins",
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class BuildSubmitButton extends StatelessWidget {
+  //final List l;
+  const BuildSubmitButton ({
+    Key? key, //required this.l
+  }) : super(key: key);
+
+
+  //void submit() {
+  //TextEditingController t = l[0];
+  //}
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            fixedSize: const Size(2, 50),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30)
+            ),
+          ),
+          onPressed: () => {},//submit(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text("Submeter", style: TextStyle(fontSize: 20))
+            ],
+          )
       ),
     );
   }
