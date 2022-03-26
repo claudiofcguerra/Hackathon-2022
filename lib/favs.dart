@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathon_2022/recipe.dart';
+import 'assets/constants.dart';
 import 'recipeclass.dart';
 import 'assets/constants.dart' as constants;
 
@@ -15,29 +18,17 @@ class _FavoritesState extends State<Favorites> {
 
   @override
   void initState() {
-    _getRecipes();
-  }
+    super.initState();
+    CollectionReference favorites = FirebaseFirestore.instance
+        .collection(FirebaseAuth.instance.currentUser!.uid);
 
-  // A method that retrieves all the dogs from the dogs table.
-  void _getRecipes() async {
-    // Get a reference to the database.
-    final db = constants.recipeDatabase;
-
-    // Query the table for all The Dogs.
-    final List<Map<String, dynamic>> maps = await db.query('recipes');
-
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
-    favoritesList = List.generate(maps.length, (i) {
-      return RecipeClass.fromJSON(maps[i]);
+    favorites.get().then((value) {
+      for (QueryDocumentSnapshot doc in value.docs) {
+        print(doc.data());
+      }
     });
 
-    /*for (RecipeClass recipe in list) {
-      print(recipe);
-    }*/
-
-    setState(() {
-      _listBuild(context);
-    });
+    favoritesList = [];
   }
 
   Widget _body = Stack(

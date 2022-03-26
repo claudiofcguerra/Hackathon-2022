@@ -8,30 +8,16 @@ import 'assets/constants.dart' as constants;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
 
-
-  constants.openRecipeDB().then(
-        (_) {
-      constants.openUserDB().then(
-            (_) {
-          if (FirebaseAuth.instance.currentUser != null) {
-            // wrong call in wrong place!
-            runApp(
-              const MaterialApp(
-                home: SwipePage(),
-              ),
-            );
-          } else {
-            runApp(
-              const MaterialApp(
-                home: LoginPage(),
-              ),
-            );
-          }
-
-        },
-      );
-    },
-  );
+  Firebase.initializeApp().then((_) {
+    if (FirebaseAuth.instance.currentUser != null) {
+      runApp(const MaterialApp(
+        home: SwipePage(),
+      ));
+    } else {
+      runApp(const MaterialApp(
+        home: LoginPage(),
+      ));
+    }
+  });
 }

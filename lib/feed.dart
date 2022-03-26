@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hackathon_2022/submitRecipe.dart';
 import 'package:hackathon_2022/swipe.dart';
 import 'assets/constants.dart' as constants;
 
@@ -35,29 +36,17 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   buildFeedList() {
-    return Expanded(
-      child: Container(
-        color: constants.backgroundColor,
-        /*padding: const EdgeInsets.only(right: 6, left: 6),*/
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverFixedExtentList(
-              itemExtent: 100,
-              delegate: SliverChildBuilderDelegate(
-                  (context, index) => Padding(
-                      padding: const EdgeInsets.only(top: 15),
-                      child: Container(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            color: constants.brown,
-                          ),
-                        ),
-                      )),
-                  childCount: 10),
-            ),
-          ],
-        ),
+    return TextButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const SubmitRecipe()),
+        );
+      },
+      child: const Icon(
+        Icons.add,
+        color: constants.secondaryColor,
+        size: 40,
       ),
     );
   }
