@@ -178,12 +178,12 @@ class BuildCardInfo extends StatefulWidget {
     "",
     3,
     90,
-    AssetImage('images/testphoto1.jpg'),
-    Evaluation(5),
-    Difficulty(3),
-    Ingredients(new Map()),
-    Instructions([""]),
-    Equpiment([""]),
+    'images/testphoto1.jpg',
+    5,
+    3,
+    [""],
+    [""],
+    [""],
   );
 
   BuildCardInfo({

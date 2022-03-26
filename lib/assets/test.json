@@ -1,0 +1,13 @@
+{
+  "name": "Bacalhau com Natas",
+  "description": "",
+  "miscellaneous": "",
+  "duration": 3,
+  "price": 90.0,
+  "foodPicUrl": "images/testphoto1.jpg",
+  "quality": 5,
+  "difficulty": 3,
+  "ingredients": [],
+  "instructions": [],
+  "equipment": []
+}
