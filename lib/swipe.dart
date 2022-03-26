@@ -49,8 +49,7 @@ class _SwipePageState extends State<SwipePage> {
 class BuildBottomRow extends StatefulWidget {
   final TCardController _controller;
 
-  const BuildBottomRow(
-    this._controller, {
+  const BuildBottomRow(this._controller, {
     Key? key,
   }) : super(key: key);
 
@@ -109,8 +108,7 @@ class _BuildBottomRowState extends State<BuildBottomRow> {
 class BuildCard extends StatefulWidget {
   final TCardController _controller;
 
-  const BuildCard(
-    this._controller, {
+  const BuildCard(this._controller, {
     Key? key,
   }) : super(key: key);
 
@@ -121,6 +119,8 @@ class BuildCard extends StatefulWidget {
 class _BuildCardState extends State<BuildCard> {
   List<RecipeClass> recipes = [];
   List<ClipRRect> cards = [];
+  late ValueChanged<int> onChange;
+  int index = 0;
 
   Widget _body = Stack(
     alignment: Alignment.center,
@@ -137,12 +137,17 @@ class _BuildCardState extends State<BuildCard> {
   @override
   void initState() {
     super.initState();
+    onChange = (value) {
+      setState(() {
+        index = value;
+      });
+    };
     _readFile();
   }
 
   Future<void> _readFile() async {
     String file =
-        await DefaultAssetBundle.of(context).loadString('images/test.txt');
+    await DefaultAssetBundle.of(context).loadString('images/test.txt');
     LineSplitter ls = const LineSplitter();
     List<String> _masForUsing = ls.convert(file);
 
@@ -154,7 +159,7 @@ class _BuildCardState extends State<BuildCard> {
 
     _createCards();
     setState(
-      () {
+          () {
         _body = _showCards(context);
       },
     );
@@ -162,9 +167,21 @@ class _BuildCardState extends State<BuildCard> {
 
   Widget _showCards(BuildContext context) {
     return Expanded(
-      child: TCard(
-        controller: widget._controller,
-        cards: cards,
+      child: GestureDetector(
+        onTap: () {
+          print(index);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Recipe()),
+          );
+        },
+        child: TCard(
+          onForward: (index, _) {
+            onChange(index);
+          },
+          controller: widget._controller,
+          cards: cards,
+        ),
       ),
     );
   }
