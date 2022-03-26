@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
 import 'package:hackathon_2022/favs.dart';
 import 'package:hackathon_2022/points.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:hackathon_2022/recipe.dart';
 import 'package:hackathon_2022/recipes.dart';
 import 'package:tcard/tcard.dart';
@@ -49,7 +47,8 @@ class _SwipePageState extends State<SwipePage> {
 class BuildBottomRow extends StatefulWidget {
   final TCardController _controller;
 
-  const BuildBottomRow(this._controller, {
+  const BuildBottomRow(
+    this._controller, {
     Key? key,
   }) : super(key: key);
 
@@ -61,45 +60,42 @@ class _BuildBottomRowState extends State<BuildBottomRow> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Container(
-        /*padding: const EdgeInsets.only(top: 1),*/
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 8,
-                primary: constants.backgroundColor,
-                shape: const CircleBorder(),
-                minimumSize: const Size.square(60),
-              ),
-              onPressed: () {
-                widget._controller.forward(direction: SwipDirection.Left);
-              },
-              child: const Icon(
-                Icons.clear,
-                color: constants.secondaryColor,
-                size: 30,
-              ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              elevation: 8,
+              primary: constants.backgroundColor,
+              shape: const CircleBorder(),
+              minimumSize: const Size.square(60),
             ),
-            ElevatedButton(
-              onPressed: () {
-                widget._controller.forward(direction: SwipDirection.Right);
-              },
-              style: ElevatedButton.styleFrom(
-                elevation: 8,
-                primary: constants.backgroundColor,
-                shape: const CircleBorder(),
-                minimumSize: const Size.square(60),
-              ),
-              child: const Icon(
-                Icons.favorite,
-                color: constants.secondaryColor,
-                size: 30,
-              ),
-            )
-          ],
-        ),
+            onPressed: () {
+              widget._controller.forward(direction: SwipDirection.Left);
+            },
+            child: const Icon(
+              Icons.clear,
+              color: constants.secondaryColor,
+              size: 30,
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              widget._controller.forward(direction: SwipDirection.Right);
+            },
+            style: ElevatedButton.styleFrom(
+              elevation: 8,
+              primary: constants.backgroundColor,
+              shape: const CircleBorder(),
+              minimumSize: const Size.square(60),
+            ),
+            child: const Icon(
+              Icons.favorite,
+              color: constants.secondaryColor,
+              size: 30,
+            ),
+          )
+        ],
       ),
     );
   }
@@ -108,7 +104,8 @@ class _BuildBottomRowState extends State<BuildBottomRow> {
 class BuildCard extends StatefulWidget {
   final TCardController _controller;
 
-  const BuildCard(this._controller, {
+  const BuildCard(
+    this._controller, {
     Key? key,
   }) : super(key: key);
 
@@ -147,7 +144,7 @@ class _BuildCardState extends State<BuildCard> {
 
   Future<void> _readFile() async {
     String file =
-    await DefaultAssetBundle.of(context).loadString('images/test.txt');
+        await DefaultAssetBundle.of(context).loadString('images/test.txt');
     LineSplitter ls = const LineSplitter();
     List<String> _masForUsing = ls.convert(file);
 
@@ -159,7 +156,7 @@ class _BuildCardState extends State<BuildCard> {
 
     _createCards();
     setState(
-          () {
+      () {
         _body = _showCards(context);
       },
     );
@@ -169,10 +166,13 @@ class _BuildCardState extends State<BuildCard> {
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          print(index);
+          if (kDebugMode) {
+            print(index);
+          }
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const Recipe()),
+            MaterialPageRoute(
+                builder: (context) => Recipe(recipe: recipes[index])),
           );
         },
         child: TCard(
@@ -245,9 +245,9 @@ class BuildTotalCard extends StatelessWidget {
 }
 
 class BuildCardInfo extends StatefulWidget {
-  final recipe;
+  final RecipeClass recipe;
 
-  BuildCardInfo({Key? key, required this.recipe}) : super(key: key);
+  const BuildCardInfo({Key? key, required this.recipe}) : super(key: key);
 
   @override
   State<BuildCardInfo> createState() => _BuildCardInfoState();
@@ -270,9 +270,9 @@ class _BuildCardInfoState extends State<BuildCardInfo> {
 }
 
 class BuildCardInfoBottomRow extends StatefulWidget {
-  RecipeClass recipe;
+  final RecipeClass recipe;
 
-  BuildCardInfoBottomRow({
+  const BuildCardInfoBottomRow({
     Key? key,
     required this.recipe,
   }) : super(key: key);
@@ -324,9 +324,9 @@ class _BuildCardInfoBottomRowState extends State<BuildCardInfoBottomRow> {
 }
 
 class BuildCardInfoTopRow extends StatefulWidget {
-  RecipeClass recipe;
+  final RecipeClass recipe;
 
-  BuildCardInfoTopRow({
+  const BuildCardInfoTopRow({
     Key? key,
     required this.recipe,
   }) : super(key: key);
