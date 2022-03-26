@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
 import 'package:hackathon_2022/favs.dart';
 import 'package:hackathon_2022/points.dart';
-import 'package:hackathon_2022/recipe.dart';
 import 'package:hackathon_2022/recipes.dart';
 import 'package:tcard/tcard.dart';
 import 'assets/constants.dart' as constants;
@@ -97,6 +96,14 @@ class BuildCard extends StatelessWidget {
     return Expanded(
       child: TCard(
         cards: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: const BuildTotalCard(),
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: const BuildTotalCard(),
+          ),
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: const BuildTotalCard(),
