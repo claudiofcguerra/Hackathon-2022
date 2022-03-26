@@ -13,29 +13,79 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('images/testFood1.jpeg'),
-          fit: BoxFit.cover
-      )
-      ),
-      child: Container(
-        width: 300,
-        height: 500,
-        alignment: Alignment.center,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(10),
-            topLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10),
-            bottomLeft: Radius.circular(10)
+    return Scaffold(
+      body: Stack(
+        children: [
+           Container(
+              width: double.infinity,
+              constraints: const BoxConstraints.expand(),
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("images/testFood1.jpeg"), fit: BoxFit.cover)),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 200,
+                  bottom: 200,
+                  left: 75,
+                  right: 75
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10)
+                    ),
+                    color: Colors.brown[300]
+                  ),
+                  child: Column(
+                    children: const [
+                      TextField(
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                              Icons.perm_identity,
+                            color: Colors.white70,
+                          ),
+                          contentPadding: EdgeInsets.all(5),
+                          //hintText: 'username',
+                          labelText: 'username',
+                          labelStyle: TextStyle(
+                            color: Colors.white70
+                          )
+                        ),
 
-          )
-        ),
-
-
+                      )
+                    ],
+                  ),
+                ),
+              ),
+           )
+        ],
       ),
     );
+    /*return Container(
+      width: double.infinity,
+      constraints: const BoxConstraints.expand(),
+      decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage("images/testFood1.jpeg"), fit: BoxFit.cover)),
+      child: SafeArea(
+
+      child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Container(
+            alignment: Alignment.center,
+            child: Column(
+                children: [
+                    Container(
+                      color: Colors.brown[300],
+                    )
+                    ],
+                ),
+          ),
+        ),
+      )
+    );*/
   }
 }

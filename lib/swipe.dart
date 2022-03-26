@@ -22,20 +22,67 @@ class SwipePage extends StatefulWidget {
 class _SwipePageState extends State<SwipePage> {
   final TCardController _controller = TCardController();
 
+  late Database database;
+  Widget _body = Stack(
+    alignment: Alignment.center,
+    children: [
+      Container(
+        height: constants.cardHeightTotal,
+      ),
+      const CircularProgressIndicator(
+        color: constants.secondaryColor,
+      ),
+    ],
+  );
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    _openDatabase();
+  }
+
+  void _openDatabase() async {
+    // Avoid errors caused by flutter upgrade.
+    // Importing 'package:flutter/widgets.dart' is required.
+    WidgetsFlutterBinding.ensureInitialized();
+    // Open the database and store the reference.
+    database = await openDatabase(
+        // Set the path to the database. Note: Using the `join` function from the
+        // `path` package is best practice to ensure the path is correctly
+        // constructed for each platform.
+        path.join(await getDatabasesPath(), 'recipes_database.db'),
+        onCreate: (db, version) {
+      // Run the CREATE TABLE statement on the database.
+      return db.execute(
+        'CREATE TABLE recipes(id INTEGER PRIMARY KEY, name TEXT, description TEXT,'
+        'miscellaneous TEXT, duration INTEGER, price REAL, foodpicurl TEXT,'
+        'quality INTEGER, difficulty INTEGER, ingredients TEXT, '
+        'instructions TEXT, equipment TEXT)',
+      );
+    },
+        // Set the version. This executes the onCreate function and provides a
+        // path to perform database upgrades and downgrades.
+        version: 1);
+
+    setState(() {
+      _body = _buildBody(context);
+    });
+  }
+
+  @override
+  Widget _buildBody(BuildContext context) {
     return Container(
       color: constants.backgroundColor,
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          const SafeArea(
-            child: BuildTopRow(),
+          SafeArea(
+            child: BuildTopRow(database),
           ),
           const SizedBox(
             height: 10,
           ),
-          BuildCard(_controller),
+          BuildCard(_controller, database),
           /*SizedBox(
             height: 5,
           ),*/
@@ -43,6 +90,11 @@ class _SwipePageState extends State<SwipePage> {
         ],
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _body;
   }
 }
 
@@ -106,8 +158,11 @@ class _BuildBottomRowState extends State<BuildBottomRow> {
 class BuildCard extends StatefulWidget {
   final TCardController _controller;
 
-  const BuildCard(
-    this._controller, {
+  Database database;
+
+  BuildCard(
+    this._controller,
+    this.database, {
     Key? key,
   }) : super(key: key);
 
@@ -133,8 +188,6 @@ class _BuildCardState extends State<BuildCard> {
     ],
   );
 
-  late Database database;
-
   @override
   void initState() {
     super.initState();
@@ -143,7 +196,6 @@ class _BuildCardState extends State<BuildCard> {
         index = value;
       });
     };
-    _openDatabase();
     _readFile();
   }
 
@@ -189,11 +241,10 @@ class _BuildCardState extends State<BuildCard> {
               print(info.direction);
             }
             if (info.direction == SwipDirection.Right) {
-              _insertRecipe(recipes[index]);
+              _insertRecipe(recipes[index - 1]);
 
               if (kDebugMode) {
                 print('like');
-                print(_debugGetRecipes());
               }
             } else {
               if (kDebugMode) {
@@ -227,23 +278,9 @@ class _BuildCardState extends State<BuildCard> {
     return _body;
   }
 
-  // A method that retrieves all the dogs from the dogs table.
-  Future<List<RecipeClass>> _debugGetRecipes() async {
-    // Get a reference to the database.
-    final db = database;
-
-    // Query the table for all The Dogs.
-    final List<Map<String, dynamic>> maps = await db.query('recipes');
-
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
-    return List.generate(maps.length, (i) {
-      return RecipeClass.fromJSON(maps[i]);
-    });
-  }
-
   void _insertRecipe(RecipeClass recipe) async {
     // Get a reference to the database.
-    final db = database;
+    final db = widget.database;
 
     // Insert the Dog into the correct table. You might also specify the
     // `conflictAlgorithm` to use in case the same dog is inserted twice.
@@ -254,30 +291,6 @@ class _BuildCardState extends State<BuildCard> {
       recipe.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-  }
-
-  void _openDatabase() async {
-    // Avoid errors caused by flutter upgrade.
-    // Importing 'package:flutter/widgets.dart' is required.
-    WidgetsFlutterBinding.ensureInitialized();
-    // Open the database and store the reference.
-    database = await openDatabase(
-        // Set the path to the database. Note: Using the `join` function from the
-        // `path` package is best practice to ensure the path is correctly
-        // constructed for each platform.
-        path.join(await getDatabasesPath(), 'recipes_database.db'),
-        onCreate: (db, version) {
-      // Run the CREATE TABLE statement on the database.
-      return db.execute(
-        'CREATE TABLE recipes(id INTEGER PRIMARY KEY, name TEXT, description TEXT,'
-        'miscellaneous TEXT, duration INTEGER, price REAL, foodpicurl TEXT,'
-        'quality INTEGER, difficulty INTEGER, ingredients BLOB, '
-        'instructions BLOB, equipment BLOB)',
-      );
-    },
-        // Set the version. This executes the onCreate function and provides a
-        // path to perform database upgrades and downgrades.
-        version: 1);
   }
 }
 
@@ -299,7 +312,7 @@ class BuildTotalCard extends StatelessWidget {
           height: constants.cardHeightImage,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(recipe.foodPicUrl),
+              image: AssetImage(recipe.foodpicurl),
               fit: BoxFit.cover,
             ),
           ),
@@ -478,7 +491,10 @@ class BuildDifficultyStars extends StatelessWidget {
 }
 
 class BuildTopRow extends StatelessWidget {
-  const BuildTopRow({
+  Database database;
+
+  BuildTopRow(
+    this.database, {
     Key? key,
   }) : super(key: key);
 
@@ -519,7 +535,7 @@ class BuildTopRow extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Favorites()),
+              MaterialPageRoute(builder: (context) => Favorites(database)),
             );
           },
           child: const Icon(
