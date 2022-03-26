@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hackathon_2022/recipe.dart';
-import 'package:path/path.dart' as path;
-import 'package:sqflite/sqflite.dart';
-import 'recipes.dart';
+import 'recipeclass.dart';
 import 'assets/constants.dart' as constants;
 
 class Favorites extends StatefulWidget {
-  Database database;
-
-  Favorites(this.database, {Key? key}) : super(key: key);
+  Favorites({Key? key}) : super(key: key);
 
   @override
   State<Favorites> createState() => _FavoritesState();
@@ -40,7 +36,7 @@ class _FavoritesState extends State<Favorites> {
   // A method that retrieves all the dogs from the dogs table.
   void _getRecipes() async {
     // Get a reference to the database.
-    final db = widget.database;
+    final db = constants.recipeDatabase;
 
     // Query the table for all The Dogs.
     final List<Map<String, dynamic>> maps = await db.query('recipes');

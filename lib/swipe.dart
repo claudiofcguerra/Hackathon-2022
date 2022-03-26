@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
 import 'package:hackathon_2022/points.dart';
 import 'package:hackathon_2022/recipe.dart';
-import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
 import 'package:tcard/tcard.dart';
-import 'package:hackathon_2022/recipes.dart';
+import 'package:hackathon_2022/recipeclass.dart';
 import 'assets/constants.dart' as constants;
 import 'favs.dart';
+import 'feed.dart';
 
 class SwipePage extends StatefulWidget {
   const SwipePage({Key? key}) : super(key: key);
@@ -22,48 +22,24 @@ class SwipePage extends StatefulWidget {
 class _SwipePageState extends State<SwipePage> {
   final TCardController _controller = TCardController();
 
-  late Database database;
-  Widget _body = Stack(
-    alignment: Alignment.center,
-    children: [
-      Container(
-        height: constants.cardHeightTotal,
-      ),
-      const CircularProgressIndicator(
-        color: constants.secondaryColor,
-      ),
-    ],
+  Widget _body = Container(
+    color: constants.backgroundColor,
+    child: Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          height: constants.cardHeightTotal,
+        ),
+        const CircularProgressIndicator(
+          color: constants.secondaryColor,
+        ),
+      ],
+    ),
   );
 
   @override
   void initState() {
     super.initState();
-    _openDatabase();
-  }
-
-  void _openDatabase() async {
-    // Avoid errors caused by flutter upgrade.
-    // Importing 'package:flutter/widgets.dart' is required.
-    WidgetsFlutterBinding.ensureInitialized();
-    // Open the database and store the reference.
-    database = await openDatabase(
-        // Set the path to the database. Note: Using the `join` function from the
-        // `path` package is best practice to ensure the path is correctly
-        // constructed for each platform.
-        path.join(await getDatabasesPath(), 'recipes_database.db'),
-        onCreate: (db, version) {
-      // Run the CREATE TABLE statement on the database.
-      return db.execute(
-        'CREATE TABLE recipes(id INTEGER PRIMARY KEY, name TEXT, description TEXT,'
-        'miscellaneous TEXT, duration INTEGER, price REAL, foodpicurl TEXT,'
-        'quality INTEGER, difficulty INTEGER, ingredients TEXT, '
-        'instructions TEXT, equipment TEXT)',
-      );
-    },
-        // Set the version. This executes the onCreate function and provides a
-        // path to perform database upgrades and downgrades.
-        version: 1);
-
     setState(() {
       _body = _buildBody(context);
     });
@@ -76,13 +52,13 @@ class _SwipePageState extends State<SwipePage> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          SafeArea(
-            child: BuildTopRow(database),
+          const SafeArea(
+            child: const BuildTopRow(),
           ),
           const SizedBox(
             height: 10,
           ),
-          BuildCard(_controller, database),
+          BuildCard(_controller),
           /*SizedBox(
             height: 5,
           ),*/
@@ -158,11 +134,8 @@ class _BuildBottomRowState extends State<BuildBottomRow> {
 class BuildCard extends StatefulWidget {
   final TCardController _controller;
 
-  Database database;
-
-  BuildCard(
-    this._controller,
-    this.database, {
+  const BuildCard(
+    this._controller, {
     Key? key,
   }) : super(key: key);
 
@@ -280,7 +253,7 @@ class _BuildCardState extends State<BuildCard> {
 
   void _insertRecipe(RecipeClass recipe) async {
     // Get a reference to the database.
-    final db = widget.database;
+    final db = constants.recipeDatabase;
 
     // Insert the Dog into the correct table. You might also specify the
     // `conflictAlgorithm` to use in case the same dog is inserted twice.
@@ -345,7 +318,7 @@ class _BuildCardInfoState extends State<BuildCardInfo> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.brown.shade300,
+      color: constants.brown,
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
@@ -491,10 +464,7 @@ class BuildDifficultyStars extends StatelessWidget {
 }
 
 class BuildTopRow extends StatelessWidget {
-  Database database;
-
-  BuildTopRow(
-    this.database, {
+  const BuildTopRow({
     Key? key,
   }) : super(key: key);
 
@@ -508,7 +478,15 @@ class BuildTopRow extends StatelessWidget {
               splashFactory: NoSplash.splashFactory,
               elevation: 0,
               primary: Colors.transparent),
-          onPressed: () {},
+          onPressed: () {
+            if (constants.currentTab != "FEED") {
+              constants.currentTab = "FEED";
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const FeedPage(),),
+              );
+            }
+          },
           child: const Icon(
             Icons.home,
             color: constants.secondaryColor,
@@ -520,7 +498,15 @@ class BuildTopRow extends StatelessWidget {
               splashFactory: NoSplash.splashFactory,
               elevation: 0,
               primary: Colors.transparent),
-          onPressed: () {},
+          onPressed: () {
+            if (constants.currentTab != "SWIPE") {
+              constants.currentTab = "SWIPE";
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const SwipePage()),
+              );
+            }
+          },
           child: const Icon(
             Icons.search,
             color: constants.secondaryColor,
@@ -533,10 +519,13 @@ class BuildTopRow extends StatelessWidget {
               elevation: 0,
               primary: Colors.transparent),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Favorites(database)),
-            );
+            /*if (constants.currentTab != "BOOKMARKS") {
+              constants.currentTab = "BOOKMARKS";*/
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Favorites()),
+              );
+            /*}*/
           },
           child: const Icon(
             Icons.favorite_border,
@@ -549,7 +538,12 @@ class BuildTopRow extends StatelessWidget {
               splashFactory: NoSplash.splashFactory,
               elevation: 0,
               primary: Colors.transparent),
-          onPressed: () {},
+          onPressed: () {
+            /*if (constants.currentTab != "PROFILE") {
+              constants.currentTab = "PROFILE";
+              // Navigate to profile page
+            }*/
+          },
           child: const Icon(
             Icons.account_circle,
             color: constants.secondaryColor,
@@ -562,10 +556,12 @@ class BuildTopRow extends StatelessWidget {
               elevation: 0,
               primary: Colors.transparent),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const PointsPage()),
-            );
+            /*if (constants.currentTab != "POINTS") {*/
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PointsPage()),
+              );
+          /*  }*/
           },
           child: CustomPaint(
             painter: CutOutTextPainter(
