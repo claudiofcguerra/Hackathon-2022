@@ -6,3 +6,4 @@ const Color backgroundColor = Colors.white;
 const double cardWidth = 379.4;
 const double cardHeightImage = 513.8;
 const double cardHeightTotal = 576.8;
+const double cardInfoHeight = cardHeightTotal - cardHeightImage;

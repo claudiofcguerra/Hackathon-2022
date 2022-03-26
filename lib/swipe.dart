@@ -4,6 +4,7 @@ import 'package:hackathon_2022/favs.dart';
 import 'package:hackathon_2022/points.dart';
 import 'package:hackathon_2022/recipe.dart';
 import 'package:hackathon_2022/recipes.dart';
+import 'package:tcard/tcard.dart';
 import 'assets/constants.dart' as constants;
 
 class SwipePage extends StatefulWidget {
@@ -93,17 +94,14 @@ class BuildCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Draggable(
-      feedback: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: const BuildTotalCard(),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: const BuildTotalCard(),
-      ),
-      childWhenDragging: Container(
-        height: constants.cardHeightTotal,
+    return Expanded(
+      child: TCard(
+        cards: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: const BuildTotalCard(),
+          ),
+        ],
       ),
     );
   }
@@ -116,32 +114,28 @@ class BuildTotalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Recipe()),
-        );
-      },
-      child: Column(
-        children: [
-          Container(
-            // Size(379.4, 513.9)
-            width: constants.cardWidth,
-            height: constants.cardHeightImage,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('images/testphoto1.jpg'),
-                fit: BoxFit.cover,
-              ),
+    return Stack(
+      children: [
+        Container(
+          // Size(379.4, 513.9)
+          width: constants.cardWidth,
+          height: constants.cardHeightImage,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/testphoto1.jpg'),
+              fit: BoxFit.cover,
             ),
           ),
-          SizedBox(
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: SizedBox(
+            height: constants.cardInfoHeight,
             width: 379.4,
             child: BuildCardInfo(),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
