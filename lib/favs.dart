@@ -30,8 +30,30 @@ class _FavoritesState extends State<Favorites> {
     [""],
   );
 
+  late List<RecipeClass> favoritesList;
+
   @override
   void initState() {
+    _getRecipes();
+  }
+
+  // A method that retrieves all the dogs from the dogs table.
+  void _getRecipes() async {
+    // Get a reference to the database.
+    final db = widget.database;
+
+    // Query the table for all The Dogs.
+    final List<Map<String, dynamic>> maps = await db.query('recipes');
+
+    // Convert the List<Map<String, dynamic> into a List<Dog>.
+    favoritesList = List.generate(maps.length, (i) {
+      return RecipeClass.fromJSON(maps[i]);
+    });
+
+    /*for (RecipeClass recipe in list) {
+      print(recipe);
+    }*/
+
     setState(() {
       _listBuild(context);
     });
@@ -51,30 +73,30 @@ class _FavoritesState extends State<Favorites> {
       padding: const EdgeInsets.all(8.0),
       child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Recipe(
-                          recipe: recipe,
-                        )),
-              );
-            },
-            child: CustomScrollView(slivers: [
-              const SliverAppBar(
-                pinned: true,
-                backgroundColor: constants.secondaryColor,
-                expandedHeight: 80.0,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text('Lista de Favoritos'),
-                ),
+          child: CustomScrollView(slivers: [
+            const SliverAppBar(
+              pinned: true,
+              backgroundColor: constants.secondaryColor,
+              expandedHeight: 80.0,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text('Lista de Favoritos'),
               ),
-              SliverFixedExtentList(
-                itemExtent: 170.0,
-                delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int count) => Padding(
-                          padding: const EdgeInsets.only(top: 10),
+            ),
+            SliverFixedExtentList(
+              itemExtent: 170.0,
+              delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int count) => Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Recipe(
+                                        recipe: favoritesList[count],
+                                      )),
+                            );
+                          },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: Container(
@@ -86,7 +108,8 @@ class _FavoritesState extends State<Favorites> {
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Image.asset(
-                                    "images/testFood1.jpeg",
+                                    // TODO: Forçar isto para ficar num square
+                                    favoritesList[count].foodpicurl,
                                     fit: BoxFit.fill,
                                     alignment: Alignment.centerLeft,
                                   ),
@@ -101,11 +124,12 @@ class _FavoritesState extends State<Favorites> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
-                                            const Material(
+                                            Material(
                                                 type: MaterialType.transparency,
-                                                child: Text('Sopa de Grelos',
+                                                child: Text(
+                                                    favoritesList[count].name,
                                                     textAlign: TextAlign.center,
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontSize: 23,
                                                         fontWeight:
                                                             FontWeight.bold))),
@@ -114,14 +138,18 @@ class _FavoritesState extends State<Favorites> {
                                                     MainAxisAlignment
                                                         .spaceEvenly,
                                                 children: [
-                                                  const Material(
+                                                  Material(
                                                       type: MaterialType
                                                           .transparency,
-                                                      child: Text('90€',
+                                                      child: Text(
+                                                          favoritesList[count]
+                                                              .formatPrice(),
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style: TextStyle(
-                                                              fontSize: 20))),
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize:
+                                                                      20))),
 
                                                   /*const SizedBox(
                                                             width: 5,
@@ -172,15 +200,19 @@ class _FavoritesState extends State<Favorites> {
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .center,
-                                                      children: const [
-                                                        Icon(
+                                                      children: [
+                                                        const Icon(
                                                           Icons.timer,
                                                           color: Colors.black,
                                                           size: 18,
                                                         ),
                                                         Text(
-                                                          "3m",
-                                                          style: TextStyle(
+                                                          favoritesList[count]
+                                                                  .duration
+                                                                  .toString() +
+                                                              "m",
+                                                          style:
+                                                              const TextStyle(
                                                             fontSize: 18,
                                                             color: Colors.black,
                                                             fontWeight:
@@ -236,10 +268,10 @@ class _FavoritesState extends State<Favorites> {
                             ),
                           ),
                         ),
-                    childCount: 10),
-              ),
-            ]),
-          )),
+                      ),
+                  childCount: favoritesList.length),
+            ),
+          ])),
     );
   }
 

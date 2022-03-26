@@ -5,7 +5,7 @@ import 'package:hackathon_2022/swipe.dart';
 void main() {
   runApp(
     const MaterialApp(
-      home: SubmitRecipe(),
+      home: SwipePage(),
     ),
   );
 }

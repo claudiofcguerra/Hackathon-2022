@@ -241,13 +241,10 @@ class _BuildCardState extends State<BuildCard> {
               print(info.direction);
             }
             if (info.direction == SwipDirection.Right) {
-              if (index < cards.length) {
-                _insertRecipe(recipes[index]);
+              _insertRecipe(recipes[index - 1]);
 
-                if (kDebugMode) {
-                  print('like');
-                  _debugGetRecipes();
-                }
+              if (kDebugMode) {
+                print('like');
               }
             } else {
               if (kDebugMode) {
@@ -279,26 +276,6 @@ class _BuildCardState extends State<BuildCard> {
   @override
   Widget build(BuildContext context) {
     return _body;
-  }
-
-  // A method that retrieves all the dogs from the dogs table.
-  Future<List<RecipeClass>> _debugGetRecipes() async {
-    // Get a reference to the database.
-    final db = widget.database;
-
-    // Query the table for all The Dogs.
-    final List<Map<String, dynamic>> maps = await db.query('recipes');
-
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
-    List<RecipeClass> list = List.generate(maps.length, (i) {
-      return RecipeClass.fromJSON(maps[i]);
-    });
-
-    /*for (RecipeClass recipe in list) {
-      print(recipe);
-    }*/
-
-    return list;
   }
 
   void _insertRecipe(RecipeClass recipe) async {
