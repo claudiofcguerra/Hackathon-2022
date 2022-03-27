@@ -6,7 +6,64 @@ import 'package:sqflite/sqflite.dart';
 
 import '../recipeclass.dart';
 
-Future<void> getRecipes() async {
+Future<void> deleteRecipe(String id) async {
+  CollectionReference _collectionRef =
+      FirebaseFirestore.instance.collection('Recipes');
+
+  await _collectionRef.doc(id).delete();
+}
+
+Future<List<RecipeClass>?> getFavoriteRecipes(String uid) async {
+  CollectionReference _collectionRef =
+      FirebaseFirestore.instance.collection('Users');
+
+  DocumentSnapshot snap =
+      await _collectionRef.doc(FirebaseAuth.instance.currentUser!.uid).get();
+
+  if (snap.exists) {
+    var data = snap.data() as Map<String, dynamic>;
+    List<dynamic> favoriteRecipesIDs = data['recipes'] as List<dynamic>;
+
+    _collectionRef = FirebaseFirestore.instance.collection('Recipes');
+
+    List<RecipeClass> l = [];
+
+    for (String id in favoriteRecipesIDs) {
+      DocumentSnapshot<Object?> doc = await _collectionRef.doc(id).get();
+      var data = doc.data() as Map<String, dynamic>;
+      data['id'] = doc.id;
+      l.add(RecipeClass.fromJSON(data));
+      var debug = 1 + 1;
+    }
+
+    return l;
+  } else {
+    return null;
+  }
+}
+
+Future<void> favoriteRecipe(RecipeClass recipe) async {
+  CollectionReference _collectionRef =
+      FirebaseFirestore.instance.collection('Users');
+
+  DocumentReference doc =
+      _collectionRef.doc(FirebaseAuth.instance.currentUser!.uid);
+
+  DocumentSnapshot snap = await doc.get();
+
+  if (snap.exists) {
+    var data = snap.data() as Map<String, dynamic>;
+    List<dynamic> l = data['recipes'] as List<dynamic>;
+    l.add(recipe.id!);
+    doc.update({'recipes': l});
+  } else {
+    Map<String, dynamic> m = {};
+    m['recipes'] = [recipe.id!];
+    _collectionRef.add(m);
+  }
+}
+
+Future<List<RecipeClass>> getRecipes() async {
   CollectionReference _collectionRef =
       FirebaseFirestore.instance.collection('Recipes');
 
@@ -17,8 +74,11 @@ Future<void> getRecipes() async {
   // Get data from docs and convert map to List
   for (var doc in querySnapshot.docs) {
     var data = doc.data() as Map<String, dynamic>;
+    data['id'] = doc.id;
     l.add(RecipeClass.fromJSON(data));
   }
+
+  return l;
 }
 
 void addRecipe(RecipeClass recipe) {

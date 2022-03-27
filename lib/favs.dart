@@ -19,16 +19,20 @@ class _FavoritesState extends State<Favorites> {
   @override
   void initState() {
     super.initState();
-    CollectionReference favorites = FirebaseFirestore.instance
-        .collection(FirebaseAuth.instance.currentUser!.uid);
 
-    favorites.get().then((value) {
-      for (QueryDocumentSnapshot doc in value.docs) {
-        print(doc.data());
-      }
-    });
+    constants.getFavoriteRecipes(FirebaseAuth.instance.currentUser!.uid).then(
+      (value) {
+        if (value != null) {
+          favoritesList = value;
+        } else {
+          favoritesList = [];
+        }
 
-    favoritesList = [];
+        setState(() {
+          _listBuild(context);
+        });
+      },
+    );
   }
 
   Widget _body = Stack(

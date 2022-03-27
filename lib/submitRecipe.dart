@@ -287,7 +287,7 @@ class _BuildDescriptionFieldState extends State<BuildDescriptionField> {
         child: TextFormField(
           controller: widget.controller,
           decoration: InputDecoration(
-            labelText: "Nome da receita",
+            labelText: "Descrição",
             fillColor: Colors.white,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24.0),

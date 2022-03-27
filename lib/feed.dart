@@ -41,7 +41,11 @@ class _FeedPageState extends State<FeedPage> {
       children: [
         TextButton(
           onPressed: () {
-            constants.getRecipes();
+            constants
+                .getFavoriteRecipes("PNxzZkaExpREb4iUau5yaSUDs183")
+                .then((value) {
+              var debug = 1 + 1;
+            });
           },
           child: const Icon(
             Icons.search,

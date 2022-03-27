@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathon_2022/assets/cut_out_text_painter.dart';
-import 'package:hackathon_2022/login.dart';
 import 'package:hackathon_2022/perfil.dart';
 import 'package:hackathon_2022/points.dart';
 import 'package:hackathon_2022/recipe.dart';
@@ -12,7 +10,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:tcard/tcard.dart';
 import 'package:hackathon_2022/recipeclass.dart';
 import 'assets/constants.dart' as constants;
-import 'assets/constants.dart';
 import 'favs.dart';
 import 'feed.dart';
 
@@ -153,9 +150,31 @@ class _BuildCardState extends State<BuildCard> {
   late ValueChanged<int> onChange;
   int index = 0;
 
+  Widget _body = Stack(
+    alignment: Alignment.center,
+    children: [
+      Container(
+        height: constants.cardHeightTotal,
+      ),
+      const CircularProgressIndicator(
+        color: constants.secondaryColor,
+      ),
+    ],
+  );
+
   @override
   void initState() {
     super.initState();
+    onChange = (value) {
+      setState(() {
+        index = value;
+      });
+    };
+    constants.getRecipes().then((value) {
+      recipes = value;
+      _createCards();
+      _body = _showCards(context);
+    });
   }
 
   Widget _showCards(BuildContext context) {
@@ -180,8 +199,8 @@ class _BuildCardState extends State<BuildCard> {
               print(info.direction);
             }
             if (info.direction == SwipDirection.Right) {
-              addRecipe(recipes[index - 1]);
-
+              /*constants.favoriteRecipe(recipes[index - 1]);*/
+              constants.favoriteRecipe(recipes[index - 1]);
               if (kDebugMode) {
                 print('like');
               }
@@ -214,18 +233,7 @@ class _BuildCardState extends State<BuildCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Container(
-          height: constants.cardHeightTotal,
-        ),
-        const CircularProgressIndicator(
-          color: constants.secondaryColor,
-        ),
-      ],
-    );
-    ;
+    return _body;
   }
 }
 
@@ -503,16 +511,10 @@ class BuildTopRow extends StatelessWidget {
               elevation: 0,
               primary: Colors.transparent),
           onPressed: () {
-            /*Navigator.push(
+            Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Perfil()),
-            );*/
-            FirebaseAuth.instance.signOut().then(
-                  (_) => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  ),
-                );
+            );
           },
           child: const Icon(
             Icons.account_circle,

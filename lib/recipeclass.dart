@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class RecipeClass {
   String name;
   String uid;
+  String? id;
   String description;
   String miscellaneous;
   int duration;
@@ -28,9 +29,25 @@ class RecipeClass {
     this.instructions,
   );
 
+  RecipeClass.withID(
+      this.name,
+      this.uid,
+      this.id,
+      this.description,
+      this.miscellaneous,
+      this.duration,
+      this.price,
+      this.foodpicurl,
+      this.quality,
+      this.difficulty,
+      this.ingredients,
+      this.instructions,
+      );
+
   RecipeClass.fromJSON(Map<String, dynamic> json)
       : name = json['name'],
         uid = json['uid'],
+        id = json['id'],
         description = json['description'],
         miscellaneous = json['miscellaneous'],
         duration = json['duration'],
