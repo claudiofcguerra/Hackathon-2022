@@ -7,6 +7,8 @@ import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.da
 import 'package:numberpicker/numberpicker.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 
 class SubmitRecipe extends StatefulWidget {
   const SubmitRecipe({Key? key}) : super(key: key);

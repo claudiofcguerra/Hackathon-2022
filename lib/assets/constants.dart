@@ -40,15 +40,21 @@ Future<List<RecipeClass>?> getFavoriteRecipes(String uid) async {
   } else {
     return null;
   }
+
+
 }
 
 Future<void> favoriteRecipe(RecipeClass recipe) async {
+
   CollectionReference _collectionRef =
       FirebaseFirestore.instance.collection('Users');
 
   DocumentReference doc =
       _collectionRef.doc(FirebaseAuth.instance.currentUser!.uid);
+  var l = [recipe.id];
+  doc.update({"recipes": FieldValue.arrayUnion(l)});
 
+  /*
   DocumentSnapshot snap = await doc.get();
 
   if (snap.exists) {
@@ -60,7 +66,7 @@ Future<void> favoriteRecipe(RecipeClass recipe) async {
     Map<String, dynamic> m = {};
     m['recipes'] = [recipe.id!];
     _collectionRef.add(m);
-  }
+  }*/
 }
 
 Future<List<RecipeClass>> getRecipes() async {
@@ -74,20 +80,35 @@ Future<List<RecipeClass>> getRecipes() async {
   // Get data from docs and convert map to List
   for (var doc in querySnapshot.docs) {
     var data = doc.data() as Map<String, dynamic>;
-    data['id'] = doc.id;
+    //data['id'] = doc.id;
     l.add(RecipeClass.fromJSON(data));
   }
 
   return l;
 }
 
-void addRecipe(RecipeClass recipe) {
+Future<void> addRecipe(RecipeClass recipe) async{
+
   CollectionReference recipes =
-      FirebaseFirestore.instance.collection('Recipes');
+  FirebaseFirestore.instance.collection('Recipes');
 
   FirebaseAuth auth = FirebaseAuth.instance;
   String uid = auth.currentUser!.uid.toString();
-  recipes.add(recipe.toJson());
+
+  CollectionReference users =
+  FirebaseFirestore.instance.collection('Users');
+
+  DocumentReference doc =
+  users.doc(FirebaseAuth.instance.currentUser!.uid);
+
+  DocumentReference docRef = await recipes.add(recipe.toJson());
+
+  var l = [docRef.id];
+  doc.update({"postedRecipes": FieldValue.arrayUnion(l)});
+
+
+
+
 }
 
 String currentTab = "SWIPE";
