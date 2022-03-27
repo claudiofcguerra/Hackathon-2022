@@ -1,17 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-void addRecipe(RecipeClass recipe) {
-  CollectionReference recipes =
-      FirebaseFirestore.instance.collection('Recipes');
-
-  FirebaseAuth auth = FirebaseAuth.instance;
-  String uid = auth.currentUser!.uid.toString();
-  recipes.add(recipe.toJson());
-}
-
 class RecipeClass {
   String name;
+  String uid;
   String description;
   String miscellaneous;
   int duration;
@@ -19,25 +11,26 @@ class RecipeClass {
   String foodpicurl;
   int quality;
   int difficulty;
-  List ingredients;
-  List instructions;
-  List equipment;
+  String ingredients;
+  String instructions;
 
   RecipeClass(
-      this.name,
-      this.description,
-      this.miscellaneous,
-      this.duration,
-      this.price,
-      this.foodpicurl,
-      this.quality,
-      this.difficulty,
-      this.ingredients,
-      this.instructions,
-      this.equipment);
+    this.name,
+    this.uid,
+    this.description,
+    this.miscellaneous,
+    this.duration,
+    this.price,
+    this.foodpicurl,
+    this.quality,
+    this.difficulty,
+    this.ingredients,
+    this.instructions,
+  );
 
   RecipeClass.fromJSON(Map<String, dynamic> json)
       : name = json['name'],
+        uid = json['uid'],
         description = json['description'],
         miscellaneous = json['miscellaneous'],
         duration = json['duration'],
@@ -45,12 +38,12 @@ class RecipeClass {
         foodpicurl = json['foodpicurl'],
         quality = json['quality'],
         difficulty = json['difficulty'],
-        ingredients = JSONConverter.fromStringToList(json['ingredients']),
-        instructions = JSONConverter.fromStringToList(json['instructions']),
-        equipment = JSONConverter.fromStringToList(json['equipment']);
+        ingredients = json['ingredients'],
+        instructions = json['instructions'];
 
   Map<String, dynamic> toJson() => {
         'name': name,
+        'uid': uid,
         'description': description,
         'miscellaneous': miscellaneous,
         'duration': duration,
@@ -58,9 +51,8 @@ class RecipeClass {
         'foodpicurl': foodpicurl,
         'quality': quality,
         'difficulty': difficulty,
-        'ingredients': JSONConverter.listToString(ingredients),
-        'instructions': JSONConverter.listToString(instructions),
-        'equipment': JSONConverter.listToString(equipment)
+        'ingredients': ingredients,
+        'instructions': instructions,
       };
 
   String formatPrice() {

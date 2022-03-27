@@ -12,6 +12,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:tcard/tcard.dart';
 import 'package:hackathon_2022/recipeclass.dart';
 import 'assets/constants.dart' as constants;
+import 'assets/constants.dart';
 import 'favs.dart';
 import 'feed.dart';
 
@@ -152,47 +153,9 @@ class _BuildCardState extends State<BuildCard> {
   late ValueChanged<int> onChange;
   int index = 0;
 
-  Widget _body = Stack(
-    alignment: Alignment.center,
-    children: [
-      Container(
-        height: constants.cardHeightTotal,
-      ),
-      const CircularProgressIndicator(
-        color: constants.secondaryColor,
-      ),
-    ],
-  );
-
   @override
   void initState() {
     super.initState();
-    onChange = (value) {
-      setState(() {
-        index = value;
-      });
-    };
-    _readFile();
-  }
-
-  Future<void> _readFile() async {
-    String file =
-        await DefaultAssetBundle.of(context).loadString('images/test.txt');
-    LineSplitter ls = const LineSplitter();
-    List<String> _masForUsing = ls.convert(file);
-
-    for (String json in _masForUsing) {
-      Map<String, dynamic> recipeMap = jsonDecode(json);
-      var recipe = RecipeClass.fromJSON(recipeMap);
-      recipes.add(recipe);
-    }
-
-    _createCards();
-    setState(
-      () {
-        _body = _showCards(context);
-      },
-    );
   }
 
   Widget _showCards(BuildContext context) {
@@ -217,7 +180,7 @@ class _BuildCardState extends State<BuildCard> {
               print(info.direction);
             }
             if (info.direction == SwipDirection.Right) {
-              _insertRecipe(recipes[index - 1]);
+              addRecipe(recipes[index - 1]);
 
               if (kDebugMode) {
                 print('like');
@@ -251,22 +214,18 @@ class _BuildCardState extends State<BuildCard> {
 
   @override
   Widget build(BuildContext context) {
-    return _body;
-  }
-
-  void _insertRecipe(RecipeClass recipe) async {
-    // Get a reference to the database.
-    final db = constants.recipeDatabase;
-
-    // Insert the Dog into the correct table. You might also specify the
-    // `conflictAlgorithm` to use in case the same dog is inserted twice.
-    //
-    // In this case, replace any previous data.
-    await db.insert(
-      'recipes',
-      recipe.toJson(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          height: constants.cardHeightTotal,
+        ),
+        const CircularProgressIndicator(
+          color: constants.secondaryColor,
+        ),
+      ],
     );
+    ;
   }
 }
 
