@@ -154,11 +154,6 @@ class BuildDifficulty extends StatelessWidget {
           color: Colors.white,
           size: 25,
         ),
-        Material(
-          type: MaterialType.transparency,
-          child: Text('  Difícil',
-              style: TextStyle(fontSize: 20.0, color: Colors.white)),
-        ),
       ],
     );
   }
