@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hackathon_2022/recipeclass.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import "assets/constants.dart" as constants;
 
 class Recipe extends StatefulWidget {
@@ -169,12 +170,12 @@ class BuildNotes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
+    return Padding(
       padding: EdgeInsets.all(8.0),
       child: Material(
         type: MaterialType.transparency,
         child: Text(
-            'iaudsfhiupasdfh\nuahnsifdn\niqewhrquir\nquwirhuiwefndioshfnweo\n',
+            recipe.description,
             style: TextStyle(fontSize: 20.0, color: Colors.white)),
       ),
     );
@@ -191,12 +192,12 @@ class BuildDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
+    return Padding(
       padding: EdgeInsets.all(8.0),
       child: Material(
         type: MaterialType.transparency,
         child: Text(
-            'iaudsfhiupasdfh\nuahnsifdn\niqewhrquir\nquwirhuiwefndioshfnweo\n',
+            recipe.instructions,
             style: TextStyle(fontSize: 20.0, color: Colors.white)),
       ),
     );

@@ -170,27 +170,10 @@ class _BuildCardState extends State<BuildCard> {
         index = value;
       });
     };
-    _readFile();
-  }
-
-  Future<void> _readFile() async {
-    String file =
-        await DefaultAssetBundle.of(context).loadString('images/test.txt');
-    LineSplitter ls = const LineSplitter();
-    List<String> _masForUsing = ls.convert(file);
-
-    for (String json in _masForUsing) {
-      Map<String, dynamic> recipeMap = jsonDecode(json);
-      var recipe = RecipeClass.fromJSON(recipeMap);
-      recipes.add(recipe);
-    }
-
-    _createCards();
-    setState(
-      () {
-        _body = _showCards(context);
-      },
-    );
+    constants.getRecipes().then((value) {
+      recipes = value;
+      _createCards();
+    });
   }
 
   Widget _showCards(BuildContext context) {
@@ -215,8 +198,8 @@ class _BuildCardState extends State<BuildCard> {
               print(info.direction);
             }
             if (info.direction == SwipDirection.Right) {
-              _insertRecipe(recipes[index - 1]);
-
+              /*constants.favoriteRecipe(recipes[index - 1]);*/
+              constants.favoriteRecipe(recipes[index - 1]);
               if (kDebugMode) {
                 print('like');
               }
@@ -245,26 +228,14 @@ class _BuildCardState extends State<BuildCard> {
         ),
       );
     }
+    if (cards.isNotEmpty) {
+      _body = _showCards(context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return _body;
-  }
-
-  void _insertRecipe(RecipeClass recipe) async {
-    // Get a reference to the database.
-    final db = constants.recipeDatabase;
-
-    // Insert the Dog into the correct table. You might also specify the
-    // `conflictAlgorithm` to use in case the same dog is inserted twice.
-    //
-    // In this case, replace any previous data.
-    await db.insert(
-      'recipes',
-      recipe.toJson(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
   }
 }
 
@@ -480,38 +451,15 @@ class BuildTopRow extends StatelessWidget {
               elevation: 0,
               primary: Colors.transparent),
           onPressed: () {
-            if (constants.currentTab != "FEED") {
-              constants.currentTab = "FEED";
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const FeedPage(),
-                ),
-              );
-            }
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const FeedPage(),
+              ),
+            );
           },
           child: const Icon(
             Icons.home,
-            color: constants.secondaryColor,
-            size: 40,
-          ),
-        ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              splashFactory: NoSplash.splashFactory,
-              elevation: 0,
-              primary: Colors.transparent),
-          onPressed: () {
-            if (constants.currentTab != "SWIPE") {
-              constants.currentTab = "SWIPE";
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const SwipePage()),
-              );
-            }
-          },
-          child: const Icon(
-            Icons.search,
             color: constants.secondaryColor,
             size: 40,
           ),

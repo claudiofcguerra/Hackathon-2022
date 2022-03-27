@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathon_2022/recipe.dart';
+import 'assets/constants.dart';
 import 'recipeclass.dart';
 import 'assets/constants.dart' as constants;
 
@@ -11,48 +14,25 @@ class Favorites extends StatefulWidget {
 }
 
 class _FavoritesState extends State<Favorites> {
-  final recipe = RecipeClass(
-    0,
-    "Bacalhau com Natas",
-    "",
-    "",
-    3,
-    90,
-    'images/testphoto1.jpg',
-    5,
-    3,
-    [""],
-    [""],
-    [""],
-  );
-
   late List<RecipeClass> favoritesList;
 
   @override
   void initState() {
-    _getRecipes();
-  }
+    super.initState();
 
-  // A method that retrieves all the dogs from the dogs table.
-  void _getRecipes() async {
-    // Get a reference to the database.
-    final db = constants.recipeDatabase;
+    constants.getFavoriteRecipes(FirebaseAuth.instance.currentUser!.uid).then(
+      (value) {
+        if (value != null) {
+          favoritesList = value;
+        } else {
+          favoritesList = [];
+        }
 
-    // Query the table for all The Dogs.
-    final List<Map<String, dynamic>> maps = await db.query('recipes');
-
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
-    favoritesList = List.generate(maps.length, (i) {
-      return RecipeClass.fromJSON(maps[i]);
-    });
-
-    /*for (RecipeClass recipe in list) {
-      print(recipe);
-    }*/
-
-    setState(() {
-      _listBuild(context);
-    });
+        setState(() {
+          _listBuild(context);
+        });
+      },
+    );
   }
 
   Widget _body = Stack(
@@ -65,224 +45,220 @@ class _FavoritesState extends State<Favorites> {
   );
 
   void _listBuild(BuildContext context) {
-    _body = Container(
-        child: CustomScrollView(slivers: [
-          const SliverAppBar(
-            pinned: true,
-            backgroundColor: constants.secondaryColor,
-            expandedHeight: 80.0,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text('Lista de Favoritos'),
-            ),
-          ),
-
-          SliverFixedExtentList(
-            itemExtent: 170.0,
-            delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int count) => Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Recipe(
-                                recipe: favoritesList[count],
-                              )),
-                        );
-                      },
-                      child: BuildRecipeCard(l: favoritesList, count: count)
-                  ),
+    _body = Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            color: constants.backgroundColor,
+            child: CustomScrollView(slivers: [
+              const SliverAppBar(
+                pinned: true,
+                backgroundColor: constants.secondaryColor,
+                expandedHeight: 80.0,
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Text('Lista de Favoritos'),
                 ),
-                childCount: favoritesList.length),
-          ),
-        ]));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _body;
-  }
-}
-
-class BuildRecipeCard extends StatelessWidget {
-  BuildRecipeCard ({
-    Key? key, required this.l, required this.count//required this.myController
-  }) : super(key: key);
-
-  List l;
-  int count;
-
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Container(
-        padding: const EdgeInsetsDirectional.only(top: 0),
-        alignment: Alignment.center,
-        color: constants.backgroundColor,
-        child: Row(
-          mainAxisAlignment:
-          MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Image.asset(
-              // TODO: Forçar isto para ficar num square
-              l[count].foodpicurl,
-              fit: BoxFit.fill,
-              alignment: Alignment.centerLeft,
-            ),
-            Expanded(
-              child: Container(
-                height: 1000.0,
-                width: 250.0,
-                padding: const EdgeInsetsDirectional.only(
-                    end: 2),
-                alignment: Alignment.center,
-                child: Column(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Material(
-                          type: MaterialType.transparency,
-                          child: Text(
-                              l[count].name,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  fontSize: 23,
-                                  fontWeight:
-                                  FontWeight.bold))),
-                      Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment
-                              .spaceEvenly,
-                          children: [
-                            Material(
-                                type: MaterialType
-                                    .transparency,
-                                child: Text(
-                                    l[count]
-                                        .formatPrice(),
-                                    textAlign:
-                                    TextAlign.center,
-                                    style:
-                                    const TextStyle(
-                                        fontSize:
-                                        20))),
-
-                            /*const SizedBox(
-                                                          width: 5,
-                                                        ),*/
-
-                            Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment
-                                  .center,
-                              children: const [
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.black,
-                                  size: 15,
-                                ),
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.black,
-                                  size: 15,
-                                ),
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.black,
-                                  size: 15,
-                                ),
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.black,
-                                  size: 15,
-                                ),
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.black,
-                                  size: 15,
-                                ),
-                              ],
-                            ),
-                          ]),
-                      Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment
-                              .spaceEvenly,
-                          children: [
-                            Material(
-                              type: MaterialType
-                                  .transparency,
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment
-                                    .center,
-                                children: [
-                                  const Icon(
-                                    Icons.timer,
-                                    color: Colors.black,
-                                    size: 18,
+              ),
+              SliverFixedExtentList(
+                itemExtent: 170.0,
+                delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int count) => Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: GestureDetector(
+                            onTap: () {
+                              /*addRecipe(favoritesList[count]);*/
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Recipe(
+                                    recipe: favoritesList[count],
                                   ),
-                                  Text(
-                                    l[count]
-                                        .duration
-                                        .toString() +
-                                        "m",
-                                    style:
-                                    const TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.black,
-                                      fontWeight:
-                                      FontWeight.bold,
+                                ),
+                              );
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                padding:
+                                    const EdgeInsetsDirectional.only(top: 0),
+                                alignment: Alignment.center,
+                                color: constants.backgroundColor,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Image.asset(
+                                      // TODO: Forçar isto para ficar num square
+                                      favoritesList[count].foodpicurl,
+                                      fit: BoxFit.fill,
+                                      alignment: Alignment.centerLeft,
                                     ),
-                                  ),
-                                ],
+                                    Expanded(
+                                      child: Container(
+                                        height: 1000.0,
+                                        width: 250.0,
+                                        padding:
+                                            const EdgeInsetsDirectional.only(
+                                                end: 2),
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Material(
+                                                  type:
+                                                      MaterialType.transparency,
+                                                  child: Text(
+                                                      favoritesList[count].name,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          fontSize: 23,
+                                                          fontWeight: FontWeight
+                                                              .bold))),
+                                              Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    Material(
+                                                        type: MaterialType
+                                                            .transparency,
+                                                        child: Text(
+                                                            favoritesList[count]
+                                                                .formatPrice(),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        20))),
+
+                                                    /*const SizedBox(
+                                                              width: 5,
+                                                            ),*/
+
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: const [
+                                                        Icon(
+                                                          Icons.star,
+                                                          color: Colors.black,
+                                                          size: 15,
+                                                        ),
+                                                        Icon(
+                                                          Icons.star,
+                                                          color: Colors.black,
+                                                          size: 15,
+                                                        ),
+                                                        Icon(
+                                                          Icons.star,
+                                                          color: Colors.black,
+                                                          size: 15,
+                                                        ),
+                                                        Icon(
+                                                          Icons.star,
+                                                          color: Colors.black,
+                                                          size: 15,
+                                                        ),
+                                                        Icon(
+                                                          Icons.star,
+                                                          color: Colors.black,
+                                                          size: 15,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ]),
+                                              Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    Material(
+                                                      type: MaterialType
+                                                          .transparency,
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          const Icon(
+                                                            Icons.timer,
+                                                            color: Colors.black,
+                                                            size: 18,
+                                                          ),
+                                                          Text(
+                                                            favoritesList[count]
+                                                                    .duration
+                                                                    .toString() +
+                                                                "m",
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 18,
+                                                              color:
+                                                                  Colors.black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+
+                                                    /*const SizedBox(
+                                                              width: 5,
+                                                            ),*/
+
+                                                    Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        /*children: <Widget>[];
+                                                            for(var i = 0; i < 3; i++) {
+                                                              children.add(
+                                                                Icon(
+                                                                  Icons.fastfood,
+                                                                  color: Colors.black,
+                                                                  size: 20,
+                                                                )
+                                                              );
+                                                            }*/
+
+                                                        children: const [
+                                                          Icon(
+                                                            Icons.fastfood,
+                                                            color: Colors.black,
+                                                            size: 20,
+                                                          ),
+                                                          Icon(
+                                                            Icons.fastfood,
+                                                            color: Colors.black,
+                                                            size: 20,
+                                                          ),
+                                                          Icon(
+                                                            Icons.fastfood,
+                                                            color: Colors.black,
+                                                            size: 20,
+                                                          )
+                                                        ]),
+                                                  ])
+                                            ]),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-
-                            /*const SizedBox(
-                                                          width: 5,
-                                                        ),*/
-
-                            Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment
-                                    .center,
-                                /*children: <Widget>[];
-                                                        for(var i = 0; i < 3; i++) {
-                                                          children.add(
-                                                            Icon(
-                                                              Icons.fastfood,
-                                                              color: Colors.black,
-                                                              size: 20,
-                                                            )
-                                                          );
-                                                        }*/
-
-                                children: const [
-                                  Icon(
-                                    Icons.fastfood,
-                                    color: Colors.black,
-                                    size: 20,
-                                  ),
-                                  Icon(
-                                    Icons.fastfood,
-                                    color: Colors.black,
-                                    size: 20,
-                                  ),
-                                  Icon(
-                                    Icons.fastfood,
-                                    color: Colors.black,
-                                    size: 20,
-                                  )
-                                ]),
-                          ])
-                    ]),
+                          ),
+                        ),
+                    childCount: favoritesList.length),
               ),
-            )
-          ],
-        ),
-      ),
+            ]),
+          )),
     );
   }
 }

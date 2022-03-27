@@ -1,64 +1,106 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
 
-Future<Database> openRecipeDB() async {
-  // Avoid errors caused by flutter upgrade.
-  // Importing 'package:flutter/widgets.dart' is required.
-  WidgetsFlutterBinding.ensureInitialized();
-  // Open the database and store the reference.
-  var db = openDatabase(
-      // Set the path to the database. Note: Using the `join` function from the
-      // `path` package is best practice to ensure the path is correctly
-      // constructed for each platform.
-      path.join(await getDatabasesPath(), 'recipes_database.db'),
-      onCreate: (db, version) {
-    // Run the CREATE TABLE statement on the database.
-    return db.execute(
-      'CREATE TABLE recipes(id INTEGER PRIMARY KEY, name TEXT, description TEXT,'
-      'miscellaneous TEXT, duration INTEGER, price REAL, foodpicurl TEXT,'
-      'quality INTEGER, difficulty INTEGER, ingredients TEXT, '
-      'instructions TEXT, equipment TEXT)',
-    );
-  },
-      // Set the version. This executes the onCreate function and provides a
-      // path to perform database upgrades and downgrades.
-      version: 1);
-  db.then((value) {
-    recipeDatabase = value;
-  });
-  return db;
+import '../recipeclass.dart';
+
+Future<void> deleteRecipe(String id) async {
+  CollectionReference _collectionRef =
+      FirebaseFirestore.instance.collection('Recipes');
+
+  await _collectionRef.doc(id).delete();
 }
 
-Future<Database> openUserDB() async {
-  // Avoid errors caused by flutter upgrade.
-  // Importing 'package:flutter/widgets.dart' is required.
-  WidgetsFlutterBinding.ensureInitialized();
-  // Open the database and store the reference.
-  var db = openDatabase(
-      // Set the path to the database. Note: Using the `join` function from the
-      // `path` package is best practice to ensure the path is correctly
-      // constructed for each platform.
-      path.join(await getDatabasesPath(), 'users_database.db'),
-      onCreate: (db, version) {
-    // Run the CREATE TABLE statement on the database.
-    return db.execute(
-      'CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT, userid INTEGER,'
-      'email TEXT, password TEXT, profilepicurl TEXT)',
-    );
-  },
-      // Set the version. This executes the onCreate function and provides a
-      // path to perform database upgrades and downgrades.
-      version: 1);
-  db.then((value) {
-    userDatabase = value;
-  });
-  return db;
+Future<List<RecipeClass>?> getFavoriteRecipes(String uid) async {
+  CollectionReference _collectionRef =
+      FirebaseFirestore.instance.collection('Users');
+
+  DocumentSnapshot snap =
+      await _collectionRef.doc(FirebaseAuth.instance.currentUser!.uid).get();
+
+  if (snap.exists) {
+    var data = snap.data() as Map<String, dynamic>;
+    List<dynamic> favoriteRecipesIDs = data['recipes'] as List<dynamic>;
+
+    _collectionRef = FirebaseFirestore.instance.collection('Recipes');
+
+    List<RecipeClass> l = [];
+
+    for (String id in favoriteRecipesIDs) {
+      DocumentSnapshot<Object?> doc = await _collectionRef.doc(id).get();
+      var data = doc.data() as Map<String, dynamic>;
+      data['id'] = doc.id;
+      l.add(RecipeClass.fromJSON(data));
+      var debug = 1 + 1;
+    }
+
+    return l;
+  } else {
+    return null;
+  }
 }
 
-late Database userDatabase;
-late Database recipeDatabase;
-String currentTab = "SWIPE";
+Future<void> favoriteRecipe(RecipeClass recipe) async {
+  CollectionReference _collectionRef =
+      FirebaseFirestore.instance.collection('Users');
+
+  DocumentReference doc =
+      _collectionRef.doc(FirebaseAuth.instance.currentUser!.uid);
+  var l = [recipe.id];
+  doc.update({"recipes": FieldValue.arrayUnion(l)});
+
+  /*
+  DocumentSnapshot snap = await doc.get();
+
+  if (snap.exists) {
+    var data = snap.data() as Map<String, dynamic>;
+    List<dynamic> l = data['recipes'] as List<dynamic>;
+    l.add(recipe.id!);
+    doc.update({'recipes': l});
+  } else {
+    Map<String, dynamic> m = {};
+    m['recipes'] = [recipe.id!];
+    _collectionRef.add(m);
+  }*/
+}
+
+Future<List<RecipeClass>> getRecipes() async {
+  CollectionReference _collectionRef =
+      FirebaseFirestore.instance.collection('Recipes');
+
+  // Get docs from collection reference
+  QuerySnapshot querySnapshot = await _collectionRef.get();
+
+  List<RecipeClass> l = [];
+  // Get data from docs and convert map to List
+  for (var doc in querySnapshot.docs) {
+    var data = doc.data() as Map<String, dynamic>;
+    data['id'] = doc.id;
+    l.add(RecipeClass.fromJSON(data));
+  }
+
+  return l;
+}
+
+Future<void> addRecipe(RecipeClass recipe) async {
+  CollectionReference recipes =
+      FirebaseFirestore.instance.collection('Recipes');
+
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String uid = auth.currentUser!.uid.toString();
+
+  CollectionReference users = FirebaseFirestore.instance.collection('Users');
+
+  DocumentReference doc = users.doc(FirebaseAuth.instance.currentUser!.uid);
+
+  DocumentReference docRef = await recipes.add(recipe.toJson());
+
+  var l = [docRef.id];
+  doc.update({"postedRecipes": FieldValue.arrayUnion(l)});
+}
+
 Color brown = Colors.brown.shade300;
 const Color primaryColor = Color(0xFF12B878);
 const Color secondaryColor = Color(0xFF358566);
