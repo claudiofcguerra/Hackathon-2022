@@ -19,8 +19,8 @@ class _FeedPageState extends State<FeedPage> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          const SafeArea(
-            child: const BuildTopRow(),
+          SafeArea(
+            child: Container(),
           ),
           const SizedBox(
             height: 10,

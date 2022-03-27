@@ -173,7 +173,6 @@ class _BuildCardState extends State<BuildCard> {
     constants.getRecipes().then((value) {
       recipes = value;
       _createCards();
-      _body = _showCards(context);
     });
   }
 
@@ -228,6 +227,9 @@ class _BuildCardState extends State<BuildCard> {
           ),
         ),
       );
+    }
+    if (cards.isNotEmpty) {
+      _body = _showCards(context);
     }
   }
 
@@ -449,15 +451,12 @@ class BuildTopRow extends StatelessWidget {
               elevation: 0,
               primary: Colors.transparent),
           onPressed: () {
-            if (constants.currentTab != "FEED") {
-              constants.currentTab = "FEED";
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const FeedPage(),
-                ),
-              );
-            }
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const FeedPage(),
+              ),
+            );
           },
           child: const Icon(
             Icons.home,
@@ -470,15 +469,7 @@ class BuildTopRow extends StatelessWidget {
               splashFactory: NoSplash.splashFactory,
               elevation: 0,
               primary: Colors.transparent),
-          onPressed: () {
-            if (constants.currentTab != "SWIPE") {
-              constants.currentTab = "SWIPE";
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const SwipePage()),
-              );
-            }
-          },
+          onPressed: () {},
           child: const Icon(
             Icons.search,
             color: constants.secondaryColor,
