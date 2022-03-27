@@ -6,6 +6,21 @@ import 'package:sqflite/sqflite.dart';
 
 import '../recipeclass.dart';
 
+Future<void> getRecipes() async {
+  CollectionReference _collectionRef =
+      FirebaseFirestore.instance.collection('Recipes');
+
+  // Get docs from collection reference
+  QuerySnapshot querySnapshot = await _collectionRef.get();
+
+  List<RecipeClass> l = [];
+  // Get data from docs and convert map to List
+  for (var doc in querySnapshot.docs) {
+    var data = doc.data() as Map<String, dynamic>;
+    l.add(RecipeClass.fromJSON(data));
+  }
+}
+
 void addRecipe(RecipeClass recipe) {
   CollectionReference recipes =
       FirebaseFirestore.instance.collection('Recipes');

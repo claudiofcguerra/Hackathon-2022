@@ -36,18 +36,33 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   buildFeedList() {
-    return TextButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const SubmitRecipe()),
-        );
-      },
-      child: const Icon(
-        Icons.add,
-        color: constants.secondaryColor,
-        size: 40,
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        TextButton(
+          onPressed: () {
+            constants.getRecipes();
+          },
+          child: const Icon(
+            Icons.search,
+            color: constants.secondaryColor,
+            size: 40,
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SubmitRecipe()),
+            );
+          },
+          child: const Icon(
+            Icons.add,
+            color: constants.secondaryColor,
+            size: 40,
+          ),
+        ),
+      ],
     );
   }
 }
