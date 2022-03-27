@@ -469,18 +469,6 @@ class BuildTopRow extends StatelessWidget {
               splashFactory: NoSplash.splashFactory,
               elevation: 0,
               primary: Colors.transparent),
-          onPressed: () {},
-          child: const Icon(
-            Icons.search,
-            color: constants.secondaryColor,
-            size: 40,
-          ),
-        ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              splashFactory: NoSplash.splashFactory,
-              elevation: 0,
-              primary: Colors.transparent),
           onPressed: () {
             /*if (constants.currentTab != "BOOKMARKS") {
               constants.currentTab = "BOOKMARKS";*/
