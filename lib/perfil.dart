@@ -192,7 +192,7 @@ class BuildRecipeCard extends StatelessWidget {
   List<RecipeClass> l;
   int count;
 
-  Widget stars(RecipeClass rc){
+  Widget stars(RecipeClass rc) {
     return Row(
       children: [
         for (int i = 1; i <= rc.quality; i++)
@@ -201,7 +201,7 @@ class BuildRecipeCard extends StatelessWidget {
             color: Colors.black,
             size: 25,
           ),
-        for (int i = rc.quality+1; i <= 5; i++)
+        for (int i = rc.quality + 1; i <= 5; i++)
           const Icon(
             Icons.star_outline,
             color: Colors.black,
@@ -211,7 +211,7 @@ class BuildRecipeCard extends StatelessWidget {
     );
   }
 
-  Widget food(RecipeClass rc){
+  Widget food(RecipeClass rc) {
     return Row(
       children: [
         for (int i = 1; i <= rc.difficulty; i++)
@@ -220,7 +220,7 @@ class BuildRecipeCard extends StatelessWidget {
             color: Colors.black,
             size: 25,
           ),
-        for (int i = rc.difficulty+1; i <= 3; i++)
+        for (int i = rc.difficulty + 1; i <= 3; i++)
           const Icon(
             Icons.fastfood_outlined,
             color: Colors.black,
@@ -242,7 +242,7 @@ class BuildRecipeCard extends StatelessWidget {
           MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Image.asset(
-              l[count-2].foodpicurl,
+              l[count - 2].foodpicurl,
               fit: BoxFit.fill,
               alignment: Alignment.centerLeft,
             ),
@@ -273,7 +273,7 @@ class BuildRecipeCard extends StatelessWidget {
                                       textAlign:
                                       TextAlign.center,
                                       style: const TextStyle(fontSize: 20))),
-                              stars(l[count-2]),
+                              stars(l[count - 2]),
                             ]),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -289,7 +289,7 @@ class BuildRecipeCard extends StatelessWidget {
                                       size: 18,
                                     ),
                                     Text(
-                                      l[count-2].duration.toString() + "m",
+                                      l[count - 2].duration.toString() + "m",
                                       style: const TextStyle(
                                         fontSize: 18,
                                         color: Colors.black,
@@ -300,12 +300,14 @@ class BuildRecipeCard extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              food(l[count-2])
+                              food(l[count - 2])
                             ]),
                       ]),
                 )
-            )],
+            )
+          ],
         ),
       ),
     );
   }
+}
