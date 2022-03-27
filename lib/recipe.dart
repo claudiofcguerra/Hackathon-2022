@@ -180,7 +180,7 @@ class BuildNotes extends StatelessWidget {
       child: Material(
         type: MaterialType.transparency,
         child: Text(
-            recipe.instructions,
+            recipe.description,
             style: TextStyle(fontSize: 20.0, color: Colors.white)),
       ),
     );
@@ -202,7 +202,7 @@ class BuildDescription extends StatelessWidget {
       child: Material(
         type: MaterialType.transparency,
         child: Text(
-            recipe.description,
+            recipe.instructions,
             style: TextStyle(fontSize: 20.0, color: Colors.white)),
       ),
     );
