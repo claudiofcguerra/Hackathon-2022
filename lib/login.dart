@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
             constraints: const BoxConstraints.expand(),
             decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("images/testFood1.jpeg"),
+                    image: AssetImage("images/fundo.png"),
                     fit: BoxFit.cover)),
             child: Padding(
               padding: const EdgeInsets.only(
@@ -52,8 +52,25 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     Padding(
+                      padding: const EdgeInsets.all(0.0),
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            scale: 10.0,
+                            image: AssetImage(
+                              'images/fcggvhj.png'
+                            )
+                          )
+                        ),
+
+                      ),
+                    ),
+                    Padding(
                       padding:
-                      const EdgeInsets.only(left: 8.0, right: 8.0, top: 15),
+                      const EdgeInsets.only(left: 8.0, right: 8.0, top: 8),
                       child: TextFormField(
                         controller: usernameController,
                         style: const TextStyle(color: Colors.white70),
