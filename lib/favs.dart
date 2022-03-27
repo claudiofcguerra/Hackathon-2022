@@ -65,14 +65,15 @@ class _FavoritesState extends State<Favorites> {
                         padding: const EdgeInsets.only(top: 10),
                         child: GestureDetector(
                           onTap: () {
-                            addRecipe(favoritesList[count]);
-                            /*Navigator.push(
+                            /*addRecipe(favoritesList[count]);*/
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Recipe(
-                                        recipe: favoritesList[count],
-                                      )),
-                            );*/
+                                builder: (context) => Recipe(
+                                  recipe: favoritesList[count],
+                                ),
+                              ),
+                            );
                           },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),

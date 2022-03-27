@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hackathon_2022/assets/constants.dart';
 import 'package:hackathon_2022/recipeclass.dart';
+import 'package:hackathon_2022/swipe.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 
 class SubmitRecipe extends StatefulWidget {
   const SubmitRecipe({Key? key}) : super(key: key);
@@ -113,6 +113,8 @@ class _SubmitRecipeState extends State<SubmitRecipe> {
                           rating.toInt(),
                           ingredientsController.value.text,
                           instructionsController.value.text));
+
+                      Navigator.pop(context);
                     }, //submit(),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
