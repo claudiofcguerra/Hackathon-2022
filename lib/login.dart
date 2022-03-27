@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Padding(
                       padding:
-                          const EdgeInsets.only(left: 8.0, right: 8.0, top: 15),
+                      const EdgeInsets.only(left: 8.0, right: 8.0, top: 15),
                       child: TextFormField(
                         controller: usernameController,
                         style: const TextStyle(color: Colors.white70),
@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                             borderSide: BorderSide(
                                 color: Colors.transparent, width: 0.0),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(30.0)),
+                            BorderRadius.all(Radius.circular(30.0)),
                           ),
                           filled: true,
                           fillColor: Colors.brown[200],
@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                             borderSide: BorderSide(
                                 color: Colors.transparent, width: 0.0),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(30.0)),
+                            BorderRadius.all(Radius.circular(30.0)),
                           ),
                           prefixIcon: const Icon(
                             Icons.perm_identity,
@@ -81,15 +81,15 @@ class _LoginPageState extends State<LoginPage> {
                           hintText: 'Username',
                           hintStyle: GoogleFonts.raleway(
                               textStyle: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.white70,
-                          )),
+                                fontSize: 18,
+                                color: Colors.white70,
+                              )),
                         ),
                       ),
                     ),
                     Padding(
                       padding:
-                          const EdgeInsets.only(left: 8.0, right: 8.0, top: 15),
+                      const EdgeInsets.only(left: 8.0, right: 8.0, top: 15),
                       child: TextFormField(
                         controller: passwordController,
                         obscureText: true,
@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                             borderSide: BorderSide(
                                 color: Colors.transparent, width: 0.0),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(30.0)),
+                            BorderRadius.all(Radius.circular(30.0)),
                           ),
                           filled: true,
                           fillColor: Colors.brown[200],
@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                             borderSide: BorderSide(
                                 color: Colors.transparent, width: 0.0),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(30.0)),
+                            BorderRadius.all(Radius.circular(30.0)),
                           ),
                           prefixIcon: const Icon(
                             Icons.lock,
@@ -117,9 +117,9 @@ class _LoginPageState extends State<LoginPage> {
                           hintText: 'Password',
                           hintStyle: GoogleFonts.raleway(
                               textStyle: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.white70,
-                          )),
+                                fontSize: 18,
+                                color: Colors.white70,
+                              )),
                         ),
                       ),
                     ),
@@ -132,9 +132,9 @@ class _LoginPageState extends State<LoginPage> {
                             'Remember me',
                             style: GoogleFonts.raleway(
                                 textStyle: const TextStyle(
-                              fontSize: 15,
-                              color: Colors.white70,
-                            )),
+                                  fontSize: 15,
+                                  color: Colors.white70,
+                                )),
                           )
                         ],
                       ),
@@ -156,9 +156,9 @@ class _LoginPageState extends State<LoginPage> {
                           'Login',
                           style: GoogleFonts.raleway(
                               textStyle: const TextStyle(
-                            fontSize: 15,
-                            color: Colors.white70,
-                          )),
+                                fontSize: 15,
+                                color: Colors.white70,
+                              )),
                         ),
                       ),
                     ),
@@ -179,9 +179,9 @@ class _LoginPageState extends State<LoginPage> {
                           'Sign Up',
                           style: GoogleFonts.raleway(
                               textStyle: const TextStyle(
-                            fontSize: 15,
-                            color: Colors.white70,
-                          )),
+                                fontSize: 15,
+                                color: Colors.white70,
+                              )),
                         ),
                       ),
                     ),
@@ -199,8 +199,8 @@ class _LoginPageState extends State<LoginPage> {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(
-              email: usernameController.value.text,
-              password: passwordController.value.text);
+          email: usernameController.value.text,
+          password: passwordController.value.text);
 
       Navigator.pushReplacement(
         context,
@@ -210,19 +210,252 @@ class _LoginPageState extends State<LoginPage> {
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(10)
+                    )
+                ),
+                backgroundColor: Colors.brown[300],
+                content: Builder(
+                  builder: (context) {
+                    var height = MediaQuery.of(context).size.height;
+                    var width = MediaQuery.of(context).size.width;
+                    return Container(
+                      alignment: Alignment.bottomCenter,
+                      height: height - 700,
+                      width:  width - 175,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top:10),
+                        child: Text(
+                          'Username does not exist, please try again.',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.raleway(
+                              textStyle: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.white70,
+
+                              )),
+                        ),
+                      ),
+                    );
+                  },
+                ) ,
+                actions: <Widget>[
+                  ButtonTheme(
+                    minWidth: 70,
+                    height: 50,
+                    child: TextButton(
+                        onPressed: () {
+                          passwordController.clear();
+                          usernameController.clear();
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          'Try again',
+                          style: GoogleFonts.raleway(
+                              textStyle: const TextStyle(
+                                fontSize: 17,
+                                color: Colors.white70,
+                              )),
+                        )),
+                  )
+                ],
+              );
+            }
+        );
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(10)
+                    )
+                ),
+                backgroundColor: Colors.brown[300],
+                content: Builder(
+                  builder: (context) {
+                    var height = MediaQuery.of(context).size.height;
+                    var width = MediaQuery.of(context).size.width;
+                    return Container(
+                      alignment: Alignment.bottomCenter,
+                      height: height - 700,
+                      width:  width - 175,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top:10),
+                        child: Text(
+                          'Wrong username or password, please try again.',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.raleway(
+                              textStyle: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.white70,
+
+                              )),
+                        ),
+                      ),
+                    );
+                  },
+                ) ,
+                actions: <Widget>[
+                  ButtonTheme(
+                    minWidth: 70,
+                    height: 50,
+                    child: TextButton(
+                        onPressed: () {
+                          passwordController.clear();
+                          usernameController.clear();
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          'Try again',
+                          style: GoogleFonts.raleway(
+                              textStyle: const TextStyle(
+                                fontSize: 17,
+                                color: Colors.white70,
+                              )),
+                        )),
+                  )
+                ],
+              );
+            }
+        );
         print('Wrong password provided for that user.');
+      } else if (e.code == "invalid-email") {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(10)
+                    )
+                ),
+                backgroundColor: Colors.brown[300],
+                content: Builder(
+                  builder: (context) {
+                    var height = MediaQuery.of(context).size.height;
+                    var width = MediaQuery.of(context).size.width;
+                    return Container(
+                      alignment: Alignment.bottomCenter,
+                      height: height - 700,
+                      width:  width - 175,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top:10),
+                        child: Text(
+                          'Invalid email, please provide a valid email address.',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.raleway(
+                              textStyle: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.white70,
+
+                              )),
+                        ),
+                      ),
+                    );
+                  },
+                ) ,
+                actions: <Widget>[
+                  ButtonTheme(
+                    minWidth: 70,
+                    height: 50,
+                    child: TextButton(
+                        onPressed: () {
+                          passwordController.clear();
+                          usernameController.clear();
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          'Try again',
+                          style: GoogleFonts.raleway(
+                              textStyle: const TextStyle(
+                                fontSize: 17,
+                                color: Colors.white70,
+                              )),
+                        )),
+                  )
+                ],
+              );
+            }
+        );
+        print('cona');
       }
     }
+  }
+
+  void _showAlertDialog(String message) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                    Radius.circular(10)
+                )
+            ),
+            backgroundColor: Colors.brown[300],
+            content: Builder(
+              builder: (context) {
+                var height = MediaQuery.of(context).size.height;
+                var width = MediaQuery.of(context).size.width;
+                return Container(
+                  alignment: Alignment.bottomCenter,
+                  height: height - 700,
+                  width:  width - 175,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top:10),
+                    child: Text(
+                      message,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.raleway(
+                          textStyle: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.white70,
+
+                          )),
+                    ),
+                  ),
+                );
+              },
+            ) ,
+            actions: <Widget>[
+              ButtonTheme(
+                minWidth: 70,
+                height: 50,
+                child: TextButton(
+                    onPressed: () {
+                      passwordController.clear();
+                      usernameController.clear();
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'Try again',
+                      style: GoogleFonts.raleway(
+                          textStyle: const TextStyle(
+                            fontSize: 17,
+                            color: Colors.white70,
+                          )),
+                    )),
+              )
+            ],
+          );
+        }
+    );
   }
 
   Future<void> _signup() async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-              email: usernameController.value.text,
-              password: passwordController.value.text);
+          email: usernameController.value.text,
+          password: passwordController.value.text);
 
       Navigator.pushReplacement(
         context,
